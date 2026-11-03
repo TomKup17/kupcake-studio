@@ -1,0 +1,36 @@
+# prostředí a sestavení
+.venv/
+build/
+dist/
+__pycache__/
+*.pyc
+
+# stahované a dočasné soubory
+*.part
+models/
+tmp/
+
+# libmpv (121 MB) – nad limit GitHubu 100 MB; postup stažení je v README → Vývoj
+mpv/*.dll
+
+# videa a zvuk – testovací nahrávky do repozitáře nepatří
+*.mp4
+*.mov
+*.mkv
+*.avi
+*.webm
+*.m4v
+*.mts
+*.wav
+*.mp3
+*.m4a
+
+# osobní nastavení, logy
+*.ini
+*.log
+styl.json
+presety.json
+.env
+
+# vygenerovaný výpis kódu (export_kodu.bat)
+kod_programu.md
