@@ -34,9 +34,10 @@
   #define Zdroj "..\dist\" + TechName
 #endif
 ; velikost jedné části instalátoru – GitHub Releases bere soubory nejvýš do 2 GiB (2 147 483 648 B);
-; „max“ = 2 100 000 000 B, s rezervou pod limitem. Pro test lze zmenšit (/DVelikostCasti=1000000).
+; pevně 2 000 000 000 B, s rezervou pod limitem. POZOR: „max“ v Inno Setup 6.4+ znamená neomezeně (jedna obří část).
+; Pro test lze zmenšit (/DVelikostCasti=5000000).
 #ifndef VelikostCasti
-  #define VelikostCasti "max"
+  #define VelikostCasti "2000000000"
 #endif
 
 [Setup]
