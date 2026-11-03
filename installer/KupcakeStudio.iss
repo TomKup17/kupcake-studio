@@ -33,6 +33,11 @@
 #ifndef Zdroj
   #define Zdroj "..\dist\" + TechName
 #endif
+; velikost jedné části instalátoru – GitHub Releases bere soubory nejvýš do 2 GiB (2 147 483 648 B);
+; „max“ = 2 100 000 000 B, s rezervou pod limitem. Pro test lze zmenšit (/DVelikostCasti=1000000).
+#ifndef VelikostCasti
+  #define VelikostCasti "max"
+#endif
 
 [Setup]
 ; AppId nikdy neměnit – podle něj Windows pozná aktualizaci téže aplikace (i ze Spellcastu a tkStudio)
@@ -69,6 +74,10 @@ CloseApplications=yes
 ChangesAssociations=yes
 Compression=lzma2/normal
 SolidCompression=yes
+; instalátor má přes 3 GB – data se rozdělí do částí KupcakeStudio-Setup-<verze>-1.bin, -2.bin…, které
+; musí ležet ve stejné složce jako Setup.exe (sám Setup.exe má jen pár MB)
+DiskSpanning=yes
+DiskSliceSize={#VelikostCasti}
 LZMAUseSeparateProcess=yes
 LZMANumBlockThreads=8
 
@@ -155,9 +164,22 @@ begin
   end;
 end;
 
+// Bez první části dat by Inno Setup chtěl „vložit disk 2“ – srozumitelnější je říct, co chybí, hned.
+function ChybiCasti(): Boolean;
+var
+  Cast: String;
+begin
+  Cast := ExpandConstant('{src}\{#TechName}-Setup-{#AppVersion}-1.bin');
+  Result := not FileExists(Cast);
+  if Result then
+    SuppressibleMsgBox('Vedle instalátoru chybí soubor:' + #13#10 + ExtractFileName(Cast) + #13#10#13#10 +
+      'Instalátor má víc částí. Stáhni z Releases všechny soubory {#TechName}-Setup-{#AppVersion} ' +
+      '(.exe i všechny .bin) do jedné složky a spusť instalátor znovu.', mbError, MB_OK, IDOK);
+end;
+
 function InitializeSetup(): Boolean;
 begin
-  Result := OdinstalujStarouVerzi();
+  Result := (not ChybiCasti()) and OdinstalujStarouVerzi();
 end;
 
 procedure SmazStaryKontext(Root: Integer; Klic: String);

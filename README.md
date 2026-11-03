@@ -85,12 +85,15 @@ Orientační rychlost přepisu (60 s souvislé řeči): RTX 4070 SUPER asi 5 s, 
 
 ## Instalace
 
-1. Stáhni `KupcakeStudio-Setup-<verze>.exe` z **Releases** tohoto repozitáře (jinde se oficiální verze nešíří).
-   Velikost: instalátor asi **3,1 GB**, po instalaci asi **6,9 GB** (obsahuje PyTorch s CUDA, FFmpeg a mpv),
-   k tomu při prvním přepisu model řeči **1,5–3,1 GB** podle zvolené přesnosti.
-2. Volitelně ověř kontrolní součet – musí se shodovat se souborem `.sha256` u vydání:
-   `Get-FileHash .\KupcakeStudio-Setup-<verze>.exe -Algorithm SHA256` (PowerShell).
-3. Spusť instalátor – instaluje se **bez práv správce**, jen pro tebe (`%LOCALAPPDATA%\Programs\KupcakeStudio`).
+1. Z **Releases** tohoto repozitáře (jinde se oficiální verze nešíří) stáhni **všechny** soubory instalátoru
+   do jedné složky: `KupcakeStudio-Setup-<verze>.exe` a k němu části `KupcakeStudio-Setup-<verze>-1.bin`,
+   `-2.bin`… GitHub dovolí soubory nejvýš do 2 GB, proto je instalátor rozdělený; bez částí `.bin` se
+   nespustí. Velikost: dohromady asi **3,1 GB**, po instalaci asi **6,9 GB** (obsahuje PyTorch s CUDA, FFmpeg
+   a mpv), k tomu při prvním přepisu model řeči **1,5–3,1 GB** podle zvolené přesnosti.
+2. Volitelně ověř kontrolní součty – musí se shodovat se souborem `KupcakeStudio-Setup-<verze>.sha256`
+   u vydání: `Get-FileHash .\KupcakeStudio-Setup-* -Algorithm SHA256` (PowerShell ve složce se staženými soubory).
+3. Spusť `KupcakeStudio-Setup-<verze>.exe` – instaluje se **bez práv správce**, jen pro tebe
+   (`%LOCALAPPDATA%\Programs\KupcakeStudio`).
 
 **Windows SmartScreen:** instalátor zatím není digitálně podepsaný, proto Windows při prvním spuštění může
 ukázat „Systém Windows ochránil váš počítač“. Klikni na **Další informace → Přesto spustit**. Udělej to jen
@@ -183,9 +186,16 @@ Seznam změn po verzích je v [CHANGELOG.md](CHANGELOG.md).
 2. Spusť **`build.bat`** a na dotaz zadej novou verzi ve tvaru `X.Y.Z`
    (např. `1.0.1` – opravy, `1.1.0` – nové funkce). Enter ponechá současnou.
    Bez ptaní: `build.bat 1.0.1`.
-3. Počkej asi 10 minut. Výsledek: **`dist\KupcakeStudio-Setup-X.Y.Z.exe`**.
+3. Počkej asi 10 minut. Výsledek ve složce `dist`: **`KupcakeStudio-Setup-X.Y.Z.exe`**, části
+   `KupcakeStudio-Setup-X.Y.Z-1.bin`, `-2.bin` (každá pod 2 GB) a `KupcakeStudio-Setup-X.Y.Z.sha256`
+   s kontrolními součty všech souborů. `build.bat` je na konci vypíše.
 4. Instalátor spusť – nainstaluje se přes starou verzi (i přes Spellcast a tkStudio). Nastavení a model zůstanou.
 5. Do `CHANGELOG.md` dopiš, co je v nové verzi.
+6. Změny nahraj na GitHub: `git add -A`, `git commit -m "Verze X.Y.Z"`, `git push`.
+7. Na GitHubu: **Releases → Draft a new release**, tag **`vX.Y.Z`** (podle něj kontrola aktualizací pozná
+   novou verzi), popis z `CHANGELOG.md` a do přílohy přetáhni **všechny** soubory z bodu 3. Beta verze
+   (`1.0.0-beta.2`) označ **Set as a pre-release** – nabídnou se jen uživatelům bety, stabilní verze
+   je nedostanou.
 
 Číslo verze je jen v **`version.py`** – `build.bat` ho tam zapíše a odtud se propíše do aplikace
 (O aplikaci), do `KupcakeStudio.exe` (Vlastnosti → Podrobnosti) i do názvu instalátoru.

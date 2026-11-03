@@ -63,12 +63,16 @@ if not defined ISCC (
     echo Přeskočeno – chybí Inno Setup. Aplikace je ve složce dist\KupcakeStudio.
     goto :konec
 )
+rem staré části téže verze pryč – jinak by zbyla třeba -3.bin z dřívějšího většího sestavení
+del /q "dist\KupcakeStudio-Setup-%VERZE%-*.bin" 2>nul
 "%ISCC%" /Qp /DAppVersion=%VERZE% /DAppVersionNum=%VERZE_CISLO% "installer\KupcakeStudio.iss" || goto :chyba
-rem kontrolní součet SHA-256 vedle instalátoru (ke zveřejnění u vydání)
-powershell -NoProfile -Command "$h=(Get-FileHash 'dist\KupcakeStudio-Setup-%VERZE%.exe' -Algorithm SHA256).Hash.ToLower(); \"$h  KupcakeStudio-Setup-%VERZE%.exe\" | Out-File -Encoding ascii 'dist\KupcakeStudio-Setup-%VERZE%.exe.sha256'" || goto :chyba
+rem kontrolní součty SHA-256 instalátoru i všech jeho částí .bin v jednom souboru (ke zveřejnění u vydání)
+powershell -NoProfile -Command "Get-ChildItem 'dist\KupcakeStudio-Setup-%VERZE%.exe','dist\KupcakeStudio-Setup-%VERZE%-*.bin' | Sort-Object Name | ForEach-Object { (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower() + '  ' + $_.Name } | Out-File -Encoding ascii 'dist\KupcakeStudio-Setup-%VERZE%.sha256'" || goto :chyba
 echo.
-echo Hotovo: dist\KupcakeStudio-Setup-%VERZE%.exe
-type "dist\KupcakeStudio-Setup-%VERZE%.exe.sha256"
+echo Hotovo – na GitHub Releases nahraj všechny tyto soubory:
+dir /b "dist\KupcakeStudio-Setup-%VERZE%.exe" "dist\KupcakeStudio-Setup-%VERZE%-*.bin" "dist\KupcakeStudio-Setup-%VERZE%.sha256"
+echo.
+type "dist\KupcakeStudio-Setup-%VERZE%.sha256"
 goto :konec
 
 :chyba

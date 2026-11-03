@@ -47,7 +47,7 @@ Opravy dostává jen **poslední vydaná verze**. Oficiální instalátor je ke 
   na typ, poškozený projekt skončí srozumitelnou hláškou, ukládá se atomicky (dočasný soubor + přejmenování).
 - Text titulků se do ASS/SRT/VTT escapuje tak, aby se nedal vykonat jako příkaz formátu.
 - Instalátor nepotřebuje práva správce (instaluje se jen pro aktuálního uživatele). Zatím není digitálně
-  podepsaný – ověř SHA-256 ze souboru `.sha256` u vydání.
+  podepsaný – ověř SHA-256 ze souboru `.sha256` u vydání (pro `.exe` i všechny části `.bin`).
 - Hlášení chyby neobsahuje uživatelské jméno (cesty do profilu se nahrazují `%LOCALAPPDATA%`).
 
 Bezpečnostní testy: `tests/` (`python -m unittest discover -s tests`). Poslední audit kódu s nálezy a stavem:

@@ -12,6 +12,13 @@ První veřejná BETA (navazuje na interní verze 1.0–1.6 níže).
   (i stejný soubor pod jiným zápisem cesty nebo velikostí písmen).
 - O aplikaci: řádek „Poskytováno bez záruky · GPL-3.0“ otevře text licence. README: Beta verze, Bez záruky, Soukromí.
 
+### GitHub
+- Zdrojový kód na https://github.com/TomKup17/kupcake-studio; odkaz GitHub v O aplikaci, Nahlásit chybu
+  vede na GitHub Issues, kontrola aktualizací sleduje Releases tohoto repozitáře.
+- Instalátor je rozdělený na `Setup.exe` a části `-1.bin`, `-2.bin` (GitHub bere soubory jen do 2 GB);
+  `.sha256` obsahuje součty všech částí. Chybí-li část vedle instalátoru, řekne to srozumitelně.
+- `libmpv-2.dll` (přes 100 MB) není v repozitáři – návod ke stažení v README → Vývoj.
+
 ### Projekty
 - Rozpracovaná práce se ukládá do projektu `.kupcake` (čitelný JSON): video, titulky se slovy, zámky,
   značky, styl, časování, smyčka a rozvržení sekcí. Soubor → Uložit projekt (Ctrl+S), Uložit jako
