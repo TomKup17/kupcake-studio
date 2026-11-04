@@ -10,7 +10,7 @@ __pycache__/
 models/
 tmp/
 
-# libmpv (121 MB) – nad limit GitHubu 100 MB; postup stažení je v README → Vývoj
+# libmpv (121 MB) – nad limit GitHubu 100 MB; postup stažení je v README.md → Development (README.cs.md → Vývoj)
 mpv/*.dll
 
 # videa a zvuk – testovací nahrávky do repozitáře nepatří

@@ -1,262 +1,277 @@
 # kupcake.studio
 
-Aplikace značky iamtom.kup. Zobrazovaný název se píše vždy `kupcake.studio`, technický název
-(soubory, složky) je `KupcakeStudio`. Dřívější názvy: **Spellcast** (do 1.1), **tkStudio** (1.2).
+**English** | [Čeština](README.cs.md)
 
-> **Název a logo:** název **kupcake.studio**, logo a ikona s cupcakem a značka iamtom.kup **nejsou
-> součástí licence kódu** – nesmí se používat pro upravené verze ani jiné projekty bez souhlasu autora.
-> **Oficiální verze je ke stažení jen z tohoto repozitáře** (Releases); instalátory z jiných zdrojů
-> mohou být upravené. Bezpečnostní problém nahlas podle [SECURITY.md](SECURITY.md).
+An app by iamtom.kup. The display name is always written `kupcake.studio`; the technical name
+(files, folders) is `KupcakeStudio`. Earlier names: **Spellcast** (up to 1.1), **tkStudio** (1.2).
 
-Automatické titulky z videa: přepis řeči (faster-whisper large-v3 na GPU), editor titulků
-s časovou osou po slovech, živý náhled v přehrávači mpv a vypálení do videa přes FFmpeg (NVENC).
+> **Name and logo:** the name **kupcake.studio**, the cupcake logo and icon and the iamtom.kup brand
+> **are not covered by the code licence** – they must not be used for modified versions or other projects
+> without the author's consent. **The official version is only available from this repository** (Releases);
+> installers from other sources may have been modified. Report security issues as described in
+> [SECURITY.md](SECURITY.md).
 
-## Beta verze
+Automatic subtitles from video: speech transcription (faster-whisper large-v3 on the GPU), a subtitle editor
+with a word-level timeline, live preview in the mpv player and burning the subtitles into the video with
+FFmpeg (NVENC).
 
-Tohle je **veřejná testovací verze** (`1.0.0-beta.1`). Aplikace je funkční, ale **může obsahovat chyby**
-a některé funkce se ještě mohou změnit. Při prvním spuštění se ukáže úvodní okno s tímto upozorněním –
-pokračuje se až po zaškrtnutí „Rozumím“ (znovu se ukáže jen u nové hlavní verze, např. přechod na 1.0).
+## Beta version
 
-- Rozpracovanou práci průběžně ukládej (Ctrl+S); navíc se každé 2 minuty ukládá automaticky a po pádu
-  aplikace nabídne obnovu.
-- **Původní video se nikdy nepřepisuje** – export do stejného souboru aplikace zablokuje. Zálohy přesto doporučujeme.
-- **Jak nahlásit chybu:** Nápověda → Nahlásit chybu / Zpětná vazba (nebo odkaz v úvodním okně). Když aplikace
-  ukáže chybové okno, klikni na **„Zkopírovat hlášení“** a vlož ho do zprávy – obsahuje verzi, systém a výpis
-  chyby, nikoli tvoje videa. Pomůže i popis kroků, které k chybě vedly, a log ze složky
-  `%LOCALAPPDATA%\KupcakeStudio\logs`.
+This is a **public test version** (`1.0.0-beta.1`). The app works, but it **may contain bugs** and some
+features may still change. On first launch a welcome window shows this notice – you continue only after
+ticking **"I understand"** (it shows again only for a new major version, e.g. the move to 1.0).
 
-## Bez záruky
+- Save your work regularly (Ctrl+S); on top of that the project is saved automatically every 2 minutes
+  and the app offers to restore it after a crash.
+- **The original video is never overwritten** – the app blocks exporting into the same file. Backups are
+  still recommended.
+- **How to report a bug:** Help → Report a bug / Feedback (or the link in the welcome window). When the app
+  shows an error window, click **"Copy report"** and paste it into your message – it contains the version,
+  the system and the error trace, not your videos. A description of the steps that led to the error helps
+  too, as does the log from `%LOCALAPPDATA%\KupcakeStudio\logs`.
 
-kupcake.studio je zdarma a **poskytuje se tak, jak je, bez jakékoli záruky** – výslovné ani předpokládané,
-včetně záruky prodejnosti nebo vhodnosti pro určitý účel. Autor neodpovídá za škody vzniklé jejím používáním,
-v rozsahu, který dovoluje zákon. Podrobně oddíly 15 a 16 licence
-[GNU GPL v3](https://www.gnu.org/licenses/gpl-3.0.html) (plné znění v souboru [LICENSE](LICENSE)).
-V aplikaci: O aplikaci → „Poskytováno bez záruky · GPL-3.0“.
+## No warranty
 
-## Soukromí
+kupcake.studio is free and **provided as is, without any warranty** – express or implied, including the
+warranty of merchantability or fitness for a particular purpose. The author is not liable for damage caused
+by using it, to the extent permitted by law. See sections 15 and 16 of the
+[GNU GPL v3](https://www.gnu.org/licenses/gpl-3.0.html) licence (full text in [LICENSE](LICENSE)).
+In the app: About → "Provided without warranty · GPL-3.0".
 
-Vše se zpracovává **jen na tvém počítači** – přepis řeči, časování slov, oddělení hlasu, náhled, přehrávání
-i export. Videa, zvuk, přepisy, titulky, projekty ani nastavení se **nikam neodesílají** a aplikace
-**nesbírá žádná data**: žádná telemetrie, žádné účty, žádné analytické nástroje, žádné identifikátory.
-Nemůžeme ale tvrdit, že aplikace nikdy nekomunikuje s internetem – připojí se přesně v těchto případech:
+## Privacy
 
-| Kdy | Kam | Co se posílá | Jak vypnout |
+Everything is processed **only on your computer** – transcription, word timing, voice separation, preview,
+playback and export. Videos, audio, transcripts, subtitles, projects and settings are **never sent anywhere**
+and the app **collects no data**: no telemetry, no accounts, no analytics, no identifiers. We can't claim
+that the app never talks to the internet, though – it connects in exactly these cases:
+
+| When | Where | What is sent | How to turn it off |
 |---|---|---|---|
-| **Kontrola nové verze** – 5 s po startu, nejvýš jednou za 24 h (ve zveřejněné verzi; dokud není v `links.py` vyplněný repozitář, kontrola neběží) | `api.github.com` (GitHub, Microsoft) | běžný HTTPS požadavek na seznam vydání; hlavička `User-Agent: kupcake.studio/<verze>`. GitHub jako každý server vidí tvoji IP adresu. Nic jiného. | Nastavení → **Kontrolovat nové verze** |
-| **Stažení modelu** – jen po tvém souhlasu v dialogu (název, velikost, zdroj) při prvním použití dané přesnosti přepisu, jazyka časování nebo oddělení hlasu | `huggingface.co` (+ jeho CDN `*.hf.co`, `*.huggingface.co`); Demucs z `dl.fbaipublicfiles.com` (Meta) | HTTPS požadavek na konkrétní soubory modelu + `User-Agent` jako výše. Server vidí IP adresu a **který model** stahuješ (tedy např. že časuješ české video). Žádné video, zvuk ani text. | nedávat souhlas (přepis pak nejde, resp. proběhne bez daného kroku) |
-| **Odkazy** – Nápověda → Nahlásit chybu, tlačítka v O aplikaci, „Stáhnout“ u nové verze | otevře se **tvůj prohlížeč** na stránce z `links.py`, resp. na stránce vydání na `github.com` | nic – jen se otevře stránka; aplikace sama **nikdy nestahuje ani nespouští instalátor** | kliknout jen, když chceš |
+| **Checking for a new version** – 5 s after start, at most once every 24 h | `api.github.com` (GitHub, Microsoft) | a normal HTTPS request for the list of releases; header `User-Agent: kupcake.studio/<version>`. Like any server, GitHub sees your IP address. Nothing else. | Settings → **Check for new versions** |
+| **Downloading a model** – only after your consent in a dialog (name, size, source), the first time a given transcription accuracy, timing language or voice separation is used | `huggingface.co` (+ its CDN `*.hf.co`, `*.huggingface.co`); Demucs from `dl.fbaipublicfiles.com` (Meta) | an HTTPS request for the specific model files + `User-Agent` as above. The server sees your IP address and **which model** you download (so e.g. that you are timing a Czech video). No video, audio or text. | don't give consent (transcription then won't run, or runs without that step) |
+| **Links** – Help → Report a bug, buttons in About, "Download" for a new version | **your browser** opens the page from `links.py`, or the release page on `github.com` | nothing – a page just opens; the app itself **never downloads or runs an installer** | click only when you want to |
 
-Co aplikace dělá navíc, aby nic „neuteklo“ samo:
+What the app also does so that nothing "leaks" on its own:
 
-- knihovny Hugging Face (`transformers`, `huggingface_hub`) běží vynuceně **offline** a s vypnutou telemetrií
-  (`HF_HUB_OFFLINE`, `HF_HUB_DISABLE_TELEMETRY` v `cesty.py`); modely stahuje jen `stahovani.py` a nikdy bez dotazu,
-- stažení i přesměrování smí vést jen na HTTPS a jen na hostitele výše; každý soubor se ověří proti **SHA-256**
-  z `manifest_modelu.py` – jiný soubor se smaže (viz [SECURITY.md](SECURITY.md)),
-- FFmpeg a mpv smí číst **jen místní soubory** (`-protocol_whitelist file`, mpv bez youtube-dl, bez skriptů
-  a konfigurace z profilu) – video, které je ve skutečnosti playlist s internetovými adresami, nic nestáhne,
-- PyTorch, CTranslate2, faster-whisper, Demucs, onnxruntime ani Qt v aplikaci na síť nesahají (ověřeno auditem
-  kódu, [docs/BEZPECNOSTNI_AUDIT.md](docs/BEZPECNOSTNI_AUDIT.md)).
+- the Hugging Face libraries (`transformers`, `huggingface_hub`) are forced **offline** with telemetry off
+  (`HF_HUB_OFFLINE`, `HF_HUB_DISABLE_TELEMETRY` in `cesty.py`); models are downloaded only by `stahovani.py`
+  and never without asking,
+- downloads and redirects may only go over HTTPS and only to the hosts above; every file is checked against
+  its **SHA-256** from `manifest_modelu.py` – a different file is deleted (see [SECURITY.md](SECURITY.md)),
+- FFmpeg and mpv may read **local files only** (`-protocol_whitelist file`, mpv without youtube-dl, without
+  scripts and config from the user profile) – a "video" that is really a playlist of internet addresses
+  downloads nothing,
+- PyTorch, CTranslate2, faster-whisper, Demucs, onnxruntime and Qt don't touch the network in the app
+  (verified by a code audit, [docs/BEZPECNOSTNI_AUDIT.md](docs/BEZPECNOSTNI_AUDIT.md), in Czech).
 
-Co zůstává jen na tvém disku (a co bys měl vědět, než to někomu pošleš):
+What stays only on your disk (and what you should know before sending it to anyone):
 
-- **log** `%LOCALAPPDATA%\KupcakeStudio\logs\kupcake.log` – průběh práce a chyby; může obsahovat **názvy a cesty
-  tvých videí a projektů** a texty chyb FFmpeg; žádné přepisy ani obsah titulků,
-- **hlášení chyby** („Zkopírovat hlášení“) – verze aplikace, verze Windows, procesor, grafická karta a ovladač,
-  text chyby; cesty do tvého profilu jsou nahrazené `%LOCALAPPDATA%`, takže neobsahuje tvoje uživatelské jméno,
-- **nastavení** `%APPDATA%\KupcakeStudio\aplikace.ini` – mj. seznam nedávných projektů (cesty), poslední volby
-  exportu; **projekty `.kupcake`** – absolutní cesta k videu, přepis (slova s časy) a titulky.
+- the **log** `%LOCALAPPDATA%\KupcakeStudio\logs\kupcake.log` – progress and errors; it may contain the
+  **names and paths of your videos and projects** and FFmpeg error texts; no transcripts or subtitle content,
+- the **error report** ("Copy report") – app version, Windows version, CPU, graphics card and driver,
+  error text; paths into your profile are replaced with `%LOCALAPPDATA%`, so it doesn't contain your user name,
+- **settings** `%APPDATA%\KupcakeStudio\aplikace.ini` – among other things the list of recent projects (paths)
+  and the last export options; **`.kupcake` projects** – the absolute path to the video, the transcript
+  (words with times) and the subtitles.
 
-Mimo aplikaci: Windows SmartScreen může při prvním spuštění nepodepsaného instalátoru sám kontaktovat Microsoft –
-to je funkce Windows, ne aplikace.
+Outside the app: Windows SmartScreen may contact Microsoft on its own the first time an unsigned installer
+runs – that's a Windows feature, not the app.
 
-## Systémové požadavky
+## System requirements
 
-| | Minimum | Doporučeno |
+| | Minimum | Recommended |
 |---|---|---|
-| Systém | Windows 10 nebo 11, 64bit | Windows 11 |
-| Procesor | 4 jádra (x64) | 8 a více jader |
-| Paměť | 8 GB RAM | 16 GB RAM |
-| Grafická karta | – (přepis i export poběží na procesoru, výrazně pomaleji) | NVIDIA s 6 GB VRAM a víc, aktuální ovladač (CUDA 12) |
-| Místo na disku | aplikace asi 7 GB + model 1,5–3 GB | 15 GB volného místa (víc modelů, exporty) |
-| Internet | při prvním přepisu (stažení modelu) | – |
+| System | Windows 10 or 11, 64-bit | Windows 11 |
+| CPU | 4 cores (x64) | 8 or more cores |
+| Memory | 8 GB RAM | 16 GB RAM |
+| Graphics card | – (transcription and export run on the CPU, much slower) | NVIDIA with 6 GB VRAM or more, current driver (CUDA 12) |
+| Disk space | app about 7 GB + model 1.5–3 GB | 15 GB free (more models, exports) |
+| Internet | for the first transcription (model download) | – |
 
-Orientační rychlost přepisu (60 s souvislé řeči): RTX 4070 SUPER asi 5 s, procesor i7-12700KF asi 50 s
-(přesnost Nejpřesnější), s přesností Rychlá asi 1,5 s / 20 s.
+Approximate transcription speed (60 s of continuous speech): RTX 4070 SUPER about 5 s, i7-12700KF CPU about
+50 s (Most accurate), with Fast accuracy about 1.5 s / 20 s.
 
-## Instalace
+## Installation
 
-1. Z **Releases** tohoto repozitáře (jinde se oficiální verze nešíří) stáhni **všechny** soubory instalátoru
-   do jedné složky: `KupcakeStudio-Setup-<verze>.exe` a k němu části `KupcakeStudio-Setup-<verze>-1.bin`,
-   `-2.bin`… GitHub dovolí soubory nejvýš do 2 GB, proto je instalátor rozdělený; bez částí `.bin` se
-   nespustí. Velikost: dohromady asi **3,1 GB**, po instalaci asi **6,9 GB** (obsahuje PyTorch s CUDA, FFmpeg
-   a mpv), k tomu při prvním přepisu model řeči **1,5–3,1 GB** podle zvolené přesnosti.
-2. Volitelně ověř kontrolní součty – musí se shodovat se souborem `KupcakeStudio-Setup-<verze>.sha256`
-   u vydání: `Get-FileHash .\KupcakeStudio-Setup-* -Algorithm SHA256` (PowerShell ve složce se staženými soubory).
-3. Spusť `KupcakeStudio-Setup-<verze>.exe` – instaluje se **bez práv správce**, jen pro tebe
+1. From this repository's **Releases** (the official version isn't distributed anywhere else), download
+   **all** installer files into one folder: `KupcakeStudio-Setup-<version>.exe` and its parts
+   `KupcakeStudio-Setup-<version>-1.bin`, `-2.bin`… GitHub only allows files up to 2 GB, so the installer
+   is split; it won't run without the `.bin` parts. Size: about **3.1 GB** in total, about **6.9 GB** after
+   installation (it includes PyTorch with CUDA, FFmpeg and mpv), plus a speech model of **1.5–3.1 GB**
+   on the first transcription, depending on the chosen accuracy.
+2. Optionally verify the checksums – they must match the `KupcakeStudio-Setup-<version>.sha256` file in the
+   release: `Get-FileHash .\KupcakeStudio-Setup-* -Algorithm SHA256` (PowerShell in the download folder).
+3. Run `KupcakeStudio-Setup-<version>.exe` – it installs **without administrator rights**, for you only
    (`%LOCALAPPDATA%\Programs\KupcakeStudio`).
 
-**Windows SmartScreen:** instalátor zatím není digitálně podepsaný, proto Windows při prvním spuštění může
-ukázat „Systém Windows ochránil váš počítač“. Klikni na **Další informace → Přesto spustit**. Udělej to jen
-u souboru staženého z Releases tohoto repozitáře se shodným SHA-256.
+**Windows SmartScreen:** the installer isn't digitally signed yet, so Windows may show "Windows protected
+your PC" on first launch. Click **More info → Run anyway**. Only do this for a file downloaded from this
+repository's Releases with a matching SHA-256.
 
-**Odinstalace:** Nastavení → Aplikace → kupcake.studio. Odinstalátor se zeptá, jestli smazat i stažené modely
-a nastavení; projekty `.kupcake` a exportovaná videa zůstanou vždy.
+**Uninstalling:** Settings → Apps → kupcake.studio. The uninstaller asks whether to also delete the
+downloaded models and settings; `.kupcake` projects and exported videos always stay.
 
 ## Licence
 
-Kód kupcake.studio je pod licencí **GNU GPL v3** ([LICENSE](LICENSE)). Knihovny, nástroje, písma (OFL 1.1)
-a modely třetích stran a jejich licence jsou v [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md), plná znění
-ve složce `licenses/` (přibalená i v instalaci). Pozor: model Meta MMS pro zarovnání u méně častých jazyků je
-CC BY-NC 4.0 – jen nekomerční použití (viz THIRD_PARTY_LICENSES.md).
+The kupcake.studio code is licensed under the **GNU GPL v3** ([LICENSE](LICENSE)). Third-party libraries,
+tools, fonts (OFL 1.1) and models and their licences are listed in
+[THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md), full texts in the `licenses/` folder (also bundled with
+the installation). Note: the Meta MMS model used for alignment in less common languages is CC BY-NC 4.0 –
+non-commercial use only (see THIRD_PARTY_LICENSES.md).
 
-## Co umí (verze 1.0.0-beta.1)
+## Features (version 1.0.0-beta.1)
 
-- projekty `.kupcake` (Soubor → Uložit projekt, Ctrl+S / Ctrl+O, Nedávné projekty, dvojklik na soubor),
-  upozornění na neuložené změny, automatické uložení každé 2 minuty a obnova po pádu (`projekt.py`),
-- přepis řeči na GPU s časy jednotlivých slov, jazyk řeči automaticky nebo ručně (100 jazyků);
-  během přepisu a exportu velká obrazovka s plnícím se cupcakem, skutečným průběhem, odhadem času
-  a tlačítkem Zrušit (`prekryti.py`, průběh i na hlavním panelu Windows),
-- funguje i bez grafické karty: `hardware.py` vybere GPU (float16 / int8_float16 podle volné VRAM) nebo procesor,
-  při nedostatku VRAM přejde na procesor; přesnost přepisu large-v3 / large-v3-turbo / medium (`model.py`),
-  odhad doby před přepisem; test bez GPU: `set KUPCAKE_CPU=1` a pak `run_dev.bat`,
-- přesné časování: zarovnání slov ke zvuku (wav2vec2, `zarovnani.py`), volitelně oddělení hlasu od hudby
-  (Demucs, `hlas.py`); posun a předstih titulků v Nastavení → Časování, Znovu zarovnat výběr (Ctrl+Shift+A),
-- editor titulků, časová osa po slovech (skupiny, střih, mazání s posunem, smyčka, značky, J/K/L…;
-  všechny zkratky ukáže **F1**),
-- panel stylu s živým náhledem v přehrávači a pojmenovanými presety (`presety.py`, `presety.json`
-  v nastavení); tečka u skupiny ukáže, že se liší od presetu,
-- po exportu notifikace v rohu okna s tlačítkem Otevřít složku (`notifikace.py`),
-- volně přesouvatelné a odpojitelné sekce s uloženými rozvrženími (viz níže),
-- rozhraní v 5 jazycích,
-- export přes panel s možnostmi (`export_panel.py`, příkazy FFmpeg v `export.py`): video s vypálenými
-  titulky (H.264/H.265 přes NVENC nebo procesor, MOV ProRes), titulky jako SRT/VTT/ASS, průhledné titulky
-  (ProRes 4444 s alfou), presety pro TikTok/Reels a YouTube, úsek videa, sjednocení hlasitosti,
-- vzhled v barvách značky s cupcakem v logu a animací při práci (viz níže).
+- `.kupcake` projects (File → Save project, Ctrl+S / Ctrl+O, Recent projects, double-click the file),
+  unsaved-changes warning, automatic save every 2 minutes and recovery after a crash (`projekt.py`),
+- speech transcription on the GPU with per-word timing, speech language detected automatically or chosen
+  manually (100 languages); during transcription and export a full-screen overlay with a filling cupcake,
+  real progress, time estimate and a Cancel button (`prekryti.py`, progress also on the Windows taskbar),
+- works without a graphics card too: `hardware.py` picks the GPU (float16 / int8_float16 depending on free
+  VRAM) or the CPU, and falls back to the CPU when VRAM runs out; transcription accuracy large-v3 /
+  large-v3-turbo / medium (`model.py`), time estimate before transcription; testing without a GPU:
+  `set KUPCAKE_CPU=1`, then `run_dev.bat`,
+- precise timing: aligning words to the audio (wav2vec2, `zarovnani.py`), optionally separating the voice
+  from music (Demucs, `hlas.py`); subtitle offset and lead-in in Settings → Timing, Re-align selection
+  (Ctrl+Shift+A),
+- subtitle editor, word-level timeline (groups, cuts, ripple delete, loop, markers, J/K/L…;
+  **F1** shows all shortcuts),
+- style panel with live preview in the player and named presets (`presety.py`, `presety.json`
+  in the settings folder); a dot next to a group shows that it differs from the preset,
+- after export, a notification in the corner of the window with an Open folder button (`notifikace.py`),
+- freely movable and detachable panels with saved layouts (see below),
+- interface in 5 languages,
+- export through a panel with options (`export_panel.py`, FFmpeg commands in `export.py`): video with
+  burned-in subtitles (H.264/H.265 via NVENC or the CPU, MOV ProRes), subtitles as SRT/VTT/ASS, transparent
+  subtitles (ProRes 4444 with alpha), presets for TikTok/Reels and YouTube, a video range, loudness
+  normalisation,
+- look in the brand colours with a cupcake in the logo and an animation while working (see below).
 
-## Vzhled
+## Look
 
-Vše je v `theme.py` – jinde barvy nepiš natvrdo. Pozadí `#080808`, panely `#111214`, rámečky
-`#1F2226`, text `#F2EFEA`, vedlejší text `#8A8F98`. Barvy značky mají dvě role, které se nemíchají:
+Everything is in `theme.py` – don't hard-code colours anywhere else. Background `#080808`, panels
+`#111214`, borders `#1F2226`, text `#F2EFEA`, secondary text `#8A8F98`. The brand colours have two roles
+that never mix:
 
-- **modrá `#00B4FF`** (`theme.AKCENT`) – výběr a fokus: označená slova a řádky, aktivní pole, záložky,
-  zaškrtávátka a přepínače,
-- **oranžová `#FF6A00`** (`theme.AKCE`) – „teď“ a „akce“: přehrávací hlava, značky, smyčka, tlačítko
-  Přehrát, posuvník a čas přehrávače, právě přehrávaný titulek, šipky číselných polí, magnet přichytávání,
-  zámky na ose, linka sekce, ve které právě pracuješ, pulzující tečka loga při zpracování, notifikace
-  a hlavní tlačítka (`objectName` `primary`: Exportovat video, Uložit preset). Jinde ne.
+- **blue `#00B4FF`** (`theme.AKCENT`) – selection and focus: selected words and rows, the active field, tabs,
+  checkboxes and toggles,
+- **orange `#FF6A00`** (`theme.AKCE`) – "now" and "action": the playhead, markers, loop, the Play button,
+  the player's seek bar and time, the subtitle currently playing, spin box arrows, the snapping magnet,
+  locks on the timeline, the line of the panel you're working in, the pulsing logo dot while processing,
+  notifications and the main buttons (`objectName` `primary`: Export video, Save preset). Nowhere else.
 
-Kontrast: tmavý text na oranžové i oranžový text na pozadí 7 : 1 (`theme.kontrast()`). Hlavní tlačítka
-jsou „pilulky“ (`primary` oranžové, `sekundarni` s obrysem), záhlaví panelů v JetBrains Mono velkými
-písmeny s modrou tečkou.
+Contrast: dark text on orange and orange text on the background are 7 : 1 (`theme.kontrast()`). The main
+buttons are "pills" (`primary` orange, `sekundarni` outlined), panel headers are JetBrains Mono in capitals
+with a blue dot.
 
-Plocha videa je nativní okno (kreslí do ní mpv); `prehravac.py` proto nastavuje
-`Qt.AA_DontCreateNativeWidgetSiblings`, jinak by Qt udělalo nativními i ovládací prvky vedle ní
-a ty by při přesunu sekce zůstávaly na starém místě. Grafické efekty (`QGraphicsEffect`) nepoužívej –
-záře se kreslí v `paint()`/`paintEvent`.
+The video area is a native window (mpv draws into it); `prehravac.py` therefore sets
+`Qt.AA_DontCreateNativeWidgetSiblings`, otherwise Qt would make the controls next to it native as well and
+they would stay in the old place when a panel is moved. Don't use graphics effects (`QGraphicsEffect`) –
+glow is drawn in `paint()`/`paintEvent`.
 
-Cupcake (ikona, logo, animace) kreslí **`kupcake.py`** – jedna kresba pro všechno, vybraná varianta
-je v `kupcake.VARIANTA`. `CupcakeAnimace` (třešnička poskakuje, kolem probliknou modré jiskřičky,
-smyčka 1,2 s) je u stavového textu během přepisu a exportu, v prázdném náhledu a v O aplikaci.
-Ikona: `python ikona/ikona.py nahledy` (návrhy v `icon_drafts/`), `python ikona/ikona.py export C`
+The cupcake (icon, logo, animation) is drawn by **`kupcake.py`** – one drawing for everything, the chosen
+variant is in `kupcake.VARIANTA`. `CupcakeAnimace` (the cherry bounces, blue sparkles flash around it,
+1.2 s loop) sits next to the status text during transcription and export, in the empty preview and in About.
+Icon: `python ikona/ikona.py nahledy` (drafts in `icon_drafts/`), `python ikona/ikona.py export C`
 → `kupcake.ico`.
 
-Seznam změn po verzích je v [CHANGELOG.md](CHANGELOG.md).
+The list of changes by version is in [CHANGELOG.md](CHANGELOG.md) (in Czech).
 
-## Vývoj
+## Development
 
-- **`run_dev.bat`** – spustí kupcake.studio přímo ze zdrojového kódu. Změny v `.py` souborech stačí uložit
-  a aplikaci spustit znovu, nic se nesestavuje. Okno konzole ukáže případné chyby.
-  Video jde předat rovnou: `run_dev.bat video.mp4`.
-- Verze ze zdrojáků i nainstalovaná verze sdílejí stejné nastavení a model.
-- Závislosti jsou v **`requirements.txt`** (nové prostředí:
-  `py -3.12 -m venv .venv` a `.venv\Scripts\python.exe -m pip install -r requirements.txt`).
-- **libmpv** (přehrávač) v repozitáři není – `libmpv-2.dll` má přes 100 MB, víc, než GitHub dovolí. Stáhni
-  archiv `mpv-dev-x86_64-<datum>-git-<hash>.7z` z
+- **`run_dev.bat`** – runs kupcake.studio straight from the source code. Just save changes in the `.py`
+  files and start the app again, nothing is built. The console window shows any errors.
+  You can pass a video directly: `run_dev.bat video.mp4`.
+- The version run from source and the installed version share the same settings and model.
+- Dependencies are in **`requirements.txt`** (new environment:
+  `py -3.12 -m venv .venv` and `.venv\Scripts\python.exe -m pip install -r requirements.txt`).
+- **libmpv** (the player) isn't in the repository – `libmpv-2.dll` is over 100 MB, more than GitHub allows.
+  Download the archive `mpv-dev-x86_64-<date>-git-<hash>.7z` from
   [shinchiro/mpv-winbuild-cmake → Releases](https://github.com/shinchiro/mpv-winbuild-cmake/releases)
-  a `libmpv-2.dll` z něj vybal do složky `mpv\`. Bez ní se aplikace ze zdrojáků spustí také, náhled
-  ale ukáže jen jednotlivé snímky bez přehrávání (`nahled.py`); sestavení instalátoru ji potřebuje.
-- **Bezpečnostní testy** ve složce `tests/` (stahování a přesměrování, integrita modelů, projekty, FFmpeg,
-  aktualizace, soukromí; nic nestahují, nastavení uživatele se nedotknou):
-  `.venv\Scripts\python.exe -m unittest discover -s tests -v` (funguje i `python -m pytest tests`).
-  Výsledky a nálezy auditu: [docs/BEZPECNOSTNI_AUDIT.md](docs/BEZPECNOSTNI_AUDIT.md).
+  and extract `libmpv-2.dll` into the `mpv\` folder. The app also starts from source without it, but the
+  preview then shows single frames without playback (`nahled.py`); building the installer needs it.
+- **Security tests** in the `tests/` folder (downloads and redirects, model integrity, projects, FFmpeg,
+  updates, privacy; they download nothing and don't touch the user's settings):
+  `.venv\Scripts\python.exe -m unittest discover -s tests -v` (`python -m pytest tests` works too).
+  Audit results and findings: [docs/BEZPECNOSTNI_AUDIT.md](docs/BEZPECNOSTNI_AUDIT.md) (in Czech).
 
-## Jak vydat novou verzi
+## How to release a new version
 
-1. Ověř změny přes `run_dev.bat`.
-2. Spusť **`build.bat`** a na dotaz zadej novou verzi ve tvaru `X.Y.Z`
-   (např. `1.0.1` – opravy, `1.1.0` – nové funkce). Enter ponechá současnou.
-   Bez ptaní: `build.bat 1.0.1`.
-3. Počkej asi 10 minut. Výsledek ve složce `dist`: **`KupcakeStudio-Setup-X.Y.Z.exe`**, části
-   `KupcakeStudio-Setup-X.Y.Z-1.bin`, `-2.bin` (každá pod 2 GB) a `KupcakeStudio-Setup-X.Y.Z.sha256`
-   s kontrolními součty všech souborů. `build.bat` je na konci vypíše.
-4. Instalátor spusť – nainstaluje se přes starou verzi (i přes Spellcast a tkStudio). Nastavení a model zůstanou.
-5. Do `CHANGELOG.md` dopiš, co je v nové verzi.
-6. Změny nahraj na GitHub: `git add -A`, `git commit -m "Verze X.Y.Z"`, `git push`.
-7. Na GitHubu: **Releases → Draft a new release**, tag **`vX.Y.Z`** (podle něj kontrola aktualizací pozná
-   novou verzi), popis z `CHANGELOG.md` a do přílohy přetáhni **všechny** soubory z bodu 3. Beta verze
-   (`1.0.0-beta.2`) označ **Set as a pre-release** – nabídnou se jen uživatelům bety, stabilní verze
-   je nedostanou.
+1. Check the changes with `run_dev.bat`.
+2. Run **`build.bat`** and enter the new version as `X.Y.Z` when asked
+   (e.g. `1.0.1` – fixes, `1.1.0` – new features). Enter keeps the current one.
+   Without asking: `build.bat 1.0.1`.
+3. Wait about 10 minutes. The result in the `dist` folder: **`KupcakeStudio-Setup-X.Y.Z.exe`**, the parts
+   `KupcakeStudio-Setup-X.Y.Z-1.bin`, `-2.bin` (each under 2 GB) and `KupcakeStudio-Setup-X.Y.Z.sha256`
+   with the checksums of all files. `build.bat` lists them at the end.
+4. Run the installer – it installs over the old version (also over Spellcast and tkStudio). Settings and the
+   model stay.
+5. Add what's new to `CHANGELOG.md`.
+6. Push the changes to GitHub: `git add -A`, `git commit -m "Version X.Y.Z"`, `git push`.
+7. On GitHub: **Releases → Draft a new release**, tag **`vX.Y.Z`** (the update check uses it to recognise
+   a new version), description from `CHANGELOG.md`, and attach **all** files from step 3. Mark beta versions
+   (`1.0.0-beta.2`) as **Set as a pre-release** – they are offered only to beta users, stable versions
+   won't get them.
 
-Číslo verze je jen v **`version.py`** – `build.bat` ho tam zapíše a odtud se propíše do aplikace
-(O aplikaci), do `KupcakeStudio.exe` (Vlastnosti → Podrobnosti) i do názvu instalátoru.
+The version number lives only in **`version.py`** – `build.bat` writes it there and from there it goes into
+the app (About), into `KupcakeStudio.exe` (Properties → Details) and into the installer name.
 
-## Jazyky
+## Languages
 
-Rozhraní je v češtině, angličtině, němčině, španělštině a slovenštině (**Nastavení → Jazyk**,
-přepne se hned). Poprvé se jazyk zvolí podle Windows, nepodporovaný jazyk = angličtina.
+The interface is available in Czech, English, German, Spanish and Slovak (**Settings → Language**,
+switches immediately). On first launch the language follows Windows; an unsupported language = English.
 
-### Jak přidat nový jazyk
+### How to add a new language
 
-1. Zkopíruj `locales\en.json` (nebo `cs.json`) jako `locales\<kód>.json` – kód podle ISO 639-1,
-   např. `pl.json` pro polštinu.
-2. Nahoře uprav `"_jazyk"` na název jazyka v jeho vlastní podobě (`"Polski"`) a `"_poradi"`
-   na pořadí v menu.
-3. Přelož hodnoty (texty vpravo). **Klíče vlevo neměň** a ponech `{parametry}` ve složených
-   závorkách, např. `"Smazáno slov: {n}"` → `"Usunięto słów: {n}"`. `&` v názvech menu označuje
-   písmeno pro Alt+klávesu.
-4. Hotovo – nový jazyk se objeví v menu sám, kód se neupravuje. Chybějící texty se zobrazí česky.
-   Pro instalačku spusť `build.bat` (složka `locales` se přibalí automaticky).
+1. Copy `locales\en.json` (or `cs.json`) as `locales\<code>.json` – ISO 639-1 code,
+   e.g. `pl.json` for Polish.
+2. At the top, set `"_jazyk"` to the language's own name (`"Polski"`) and `"_poradi"`
+   to its position in the menu.
+3. Translate the values (texts on the right). **Don't change the keys on the left** and keep
+   `{parameters}` in curly braces, e.g. `"Words deleted: {n}"` → `"Usunięto słów: {n}"`. `&` in menu names
+   marks the Alt+key letter.
+4. Done – the new language appears in the menu by itself, no code changes needed. Missing texts are shown
+   in Czech. For the installer run `build.bat` (the `locales` folder is bundled automatically).
 
-Jazyk **řeči** pro přepis se volí zvlášť po otevření videa (výchozí je automatické rozpoznání,
-poslední volba se pamatuje).
+The **speech** language for transcription is chosen separately after opening a video (the default is
+automatic detection; the last choice is remembered).
 
-## Rozvržení sekcí
+## Panel layout
 
-Sekce Titulky, Náhled, Nastavení a Časová osa jde chytit za záhlaví a přetáhnout jinam
-(knihovna Qt Advanced Docking System, `doky.py`; vzhled v `theme.qss_doku()`):
+The Subtitles, Preview, Settings and Timeline panels can be grabbed by their header and dragged elsewhere
+(Qt Advanced Docking System, `doky.py`; look in `theme.qss_doku()`):
 
-- puštění na okraj jiné sekce = vedle ní, doprostřed = jako záložka, mimo okno = samostatné okno
-  (i na druhý monitor; tlačítko ⧉ v záhlaví dělá totéž),
-- dvojklik na záhlaví = sekce přes celé okno, další dvojklik vrátí rozvržení,
-- **Zobrazení → Sekce** – zapnout/vypnout jednotlivé sekce (křížek v záhlaví sekci jen skryje),
-- **Zobrazení → Uložená rozvržení** – pojmenovaná rozvržení (např. „Časování“, „Styl“),
-- **Zobrazení → Zamknout rozvržení** a **Obnovit výchozí rozvržení**.
+- dropping on the edge of another panel = next to it, in the middle = as a tab, outside the window =
+  a separate window (also on a second monitor; the ⧉ button in the header does the same),
+- double-click a header = panel fills the whole window, another double-click restores the layout,
+- **View → Panels** – show/hide individual panels (the cross in the header only hides the panel),
+- **View → Saved layouts** – named layouts (e.g. "Timing", "Style"),
+- **View → Lock layout** and **Restore default layout**.
 
-Rozvržení včetně samostatných oken se uloží při zavření a obnoví při dalším spuštění.
-Licence knihoven třetích stran: `THIRD_PARTY_LICENSES.md` a složka `licenses`.
+The layout, including separate windows, is saved on close and restored on the next launch.
+Third-party library licences: `THIRD_PARTY_LICENSES.md` and the `licenses` folder.
 
-## Kde co je
+## Where things are
 
-| Co | Kde |
+| What | Where |
 |---|---|
-| Nainstalovaná aplikace | `%LOCALAPPDATA%\Programs\KupcakeStudio` (od 1.6 bez práv správce; do 1.5 `C:\Program Files\KupcakeStudio`) |
-| Nastavení (uložený styl) | `%APPDATA%\KupcakeStudio\styl.json` |
-| Jazyk rozhraní a řeči | `%APPDATA%\KupcakeStudio\aplikace.ini` |
-| Rozvržení okna / uložená rozvržení | `%APPDATA%\KupcakeStudio\rozlozeni.ini`, `rozvrzeni_vlastni.ini` |
-| Model řeči (~3 GB, stáhne se při prvním přepisu) | `%LOCALAPPDATA%\KupcakeStudio\models` |
-| Modely přesného časování (~1,2 GB na jazyk) a Demucs | `…\models\zarovnani`, `…\models\demucs` |
-| Dočasné soubory | `%LOCALAPPDATA%\KupcakeStudio\tmp` |
+| Installed app | `%LOCALAPPDATA%\Programs\KupcakeStudio` (since 1.6 without admin rights; up to 1.5 `C:\Program Files\KupcakeStudio`) |
+| Settings (saved style) | `%APPDATA%\KupcakeStudio\styl.json` |
+| Interface and speech language | `%APPDATA%\KupcakeStudio\aplikace.ini` |
+| Window layout / saved layouts | `%APPDATA%\KupcakeStudio\rozlozeni.ini`, `rozvrzeni_vlastni.ini` |
+| Speech model (~3 GB, downloaded on the first transcription) | `%LOCALAPPDATA%\KupcakeStudio\models` |
+| Precise-timing models (~1.2 GB per language) and Demucs | `…\models\zarovnani`, `…\models\demucs` |
+| Temporary files | `%LOCALAPPDATA%\KupcakeStudio\tmp` |
 
-Při prvním spuštění se nastavení, rozvržení, styl a stažený model automaticky přesunou ze složek
-`tkStudio` a `Spellcast` (`cesty.migruj_stara_data`; když existují obě, má přednost novější tkStudio);
-značka `.migrace` v nastavení zajistí, že se to stane jen jednou.
+On first launch, settings, layout, style and the downloaded model are moved automatically from the
+`tkStudio` and `Spellcast` folders (`cesty.migruj_stara_data`; if both exist, the newer tkStudio wins);
+the `.migrace` marker in the settings makes sure it happens only once.
 
-Instalátor má pevné `AppId` (v `installer\KupcakeStudio.iss`) – **nikdy ho neměň**, jinak by se nová
-verze nainstalovala vedle staré místo přes ni. Díky němu nová verze nahradí i nainstalovaný Spellcast nebo tkStudio
-(starou složku, zástupce a položku v kontextové nabídce odstraní).
+The installer has a fixed `AppId` (in `installer\KupcakeStudio.iss`) – **never change it**, otherwise a new
+version would install next to the old one instead of over it. Thanks to it, a new version also replaces an
+installed Spellcast or tkStudio (it removes the old folder, shortcuts and context menu entry).
 
-## Potřebné nástroje pro sestavení
+## Tools needed to build
 
-- `.venv` s Pythonem 3.12 (už existuje)
-- FFmpeg v PATH – přibaluje se do aplikace (`winget install Gyan.FFmpeg`)
-- Inno Setup 6 – vytváří instalátor (`winget install JRSoftware.InnoSetup`)
+- `.venv` with Python 3.12 (already exists)
+- FFmpeg in PATH – bundled into the app (`winget install Gyan.FFmpeg`)
+- Inno Setup 6 – creates the installer (`winget install JRSoftware.InnoSetup`)
