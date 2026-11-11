@@ -1,4 +1,6 @@
-﻿; Instalátor kupcake.studio (Inno Setup 6). Kompiluje ho build.bat s verzí z version.py:
+﻿; kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+; SPDX-License-Identifier: GPL-3.0-only
+; Instalátor kupcake.studio (Inno Setup 6). Kompiluje ho build.bat s verzí z version.py:
 ;   ISCC /DAppVersion=1.3.0 installer\KupcakeStudio.iss  ->  dist\KupcakeStudio-Setup-1.3.0.exe
 ; Soubor musí zůstat v UTF-8 s BOM (kvůli češtině).
 ;
@@ -62,6 +64,8 @@ OutputBaseFilename={#TechName}-Setup-{#AppVersion}
 SetupIconFile=..\kupcake.ico
 UninstallDisplayIcon={app}\{#AppExe}
 UninstallDisplayName={#AppName}
+; stránka s podmínkami použití (prostý text v UTF-8 s BOM; z TERMS.cs.md ho dělá nastroje\podminky_txt.py)
+LicenseFile=PODMINKY.txt
 VersionInfoVersion={#AppVersionNum}
 VersionInfoCompany={#AppPublisher}
 VersionInfoDescription={#AppName} – instalátor

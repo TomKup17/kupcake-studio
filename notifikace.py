@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Nenápadná notifikace v pravém dolním rohu okna (hotový export): oranžový proužek vlevo, nadpis, název
 souboru, tlačítko akce („Otevřít složku“) a samovolné zmizení po pár sekundách.
 

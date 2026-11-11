@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Vytvoří manifest_modelu.py: pevná revize (commit) a SHA-256 každého souboru modelů, které aplikace stahuje.
 
 Spouští se jen při změně modelů (vývojář, ne aplikace):  .venv\\Scripts\\python.exe nastroje\\vytvor_manifest.py
@@ -73,7 +75,8 @@ except ImportError:
     demucs = {"url": DEMUCS_URL, "velikost": len(data), "sha256": sha}
 print("Demucs htdemucs:", demucs["velikost"], demucs["sha256"], flush=True)
 
-radky = ['"""Pevné revize a SHA-256 modelů, které aplikace stahuje. VYGENEROVÁNO nastroje/vytvor_manifest.py –',
+radky = ['# kupcake.studio – Copyright (C) 2026 Tomáš Kupec', '# SPDX-License-Identifier: GPL-3.0-only',
+         '"""Pevné revize a SHA-256 modelů, které aplikace stahuje. VYGENEROVÁNO nastroje/vytvor_manifest.py –',
          'neupravovat ručně. Každý stažený soubor se proti tomuto seznamu ověří (stahovani.py)."""', "",
          "# repo → {revize: commit, soubory: {jméno: (velikost v B, SHA-256)}}", "HUGGINGFACE = {"]
 for nazev, m in manifest.items():

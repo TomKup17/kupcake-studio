@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Modely Whisper pro přepis – nepřibalují se, při prvním použití se připraví do %LOCALAPPDATA%\\KupcakeStudio\\models.
 
 Tři přesnosti (volba „Přesnost přepisu“): large-v3 (nejpřesnější), large-v3-turbo (rychlá), medium (úsporná).
@@ -18,11 +20,14 @@ _log = logging.getLogger("kupcake").info  # výchozí log: do souboru (logy.py)
 MODELY = {
     "large-v3": ("Systran/faster-whisper-large-v3",
                  ["config.json", "preprocessor_config.json", "tokenizer.json", "vocabulary.json", "model.bin"]),
-    "turbo": ("mobiuslabsgmbh/faster-whisper-large-v3-turbo",
+    "turbo": ("dropbox-dash/faster-whisper-large-v3-turbo",
               ["config.json", "preprocessor_config.json", "tokenizer.json", "vocabulary.json", "model.bin"]),
     "medium": ("Systran/faster-whisper-medium", ["config.json", "tokenizer.json", "vocabulary.txt", "model.bin"]),
 }
 VYCHOZI = "large-v3"
+# dřívější adresy repozitářů (Hugging Face je přesměrovává): model stažený knihovnou pod starým jménem
+# se v cache Hugging Face najde i tak. Složka modelu v aplikaci se nemění (jen část za lomítkem).
+DRIVE = {"dropbox-dash/faster-whisper-large-v3-turbo": ["mobiuslabsgmbh/faster-whisper-large-v3-turbo"]}
 
 
 def repo(klic=VYCHOZI):
@@ -49,9 +54,11 @@ def velikost(klic=VYCHOZI):
 
 def _najdi_v_cache(r):
     hub = Path(os.environ.get("HF_HOME") or Path.home() / ".cache" / "huggingface") / "hub"
-    snapshots = hub / f"models--{r.replace('/', '--')}" / "snapshots"
     revize = stahovani.HUGGINGFACE[r]["revize"]
-    kandidati = [snapshots / revize] + sorted(snapshots.glob("*"), reverse=True)
+    kandidati = []
+    for jmeno in [r] + DRIVE.get(r, []):
+        snapshots = hub / f"models--{jmeno.replace('/', '--')}" / "snapshots"
+        kandidati += [snapshots / revize] + sorted(snapshots.glob("*"), reverse=True)
     return next((s for s in kandidati if s.is_dir()), None)
 
 

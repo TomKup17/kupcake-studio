@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Překlady rozhraní.
 
 Texty jsou v locales/<kód>.json (klíč → text, parametry ve tvaru {jmeno}). Nový jazyk = nový JSON soubor,

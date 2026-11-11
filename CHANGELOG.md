@@ -1,5 +1,50 @@
 # Změny
 
+## Neuvydáno – změny po 1.0.0-beta.1
+
+### Licence a dokumentace
+- `THIRD_PARTY_LICENSES.md` přepsán podle skutečného obsahu instalátoru: přesné verze všech součástí, opravené
+  údaje (mpv je sestavení pod GPL s kodéry x264 a x265; FFmpeg 9.0.2; Qt-ADS 5.1.1; licence uromanu) a doplněné
+  součásti – knihovny uvnitř PyAV (FFmpeg, x264, x265, libvpx, dav1d, SVT-AV1, Opus, WebP, VMAF, libvpl),
+  Silero VAD, lameenc a LAME, hf-xet, Python, OpenSSL, SQLite, libffi, expat, Intel oneMKL a OpenMP,
+  běhové knihovny Microsoft Visual C++.
+- Nový oddíl „Zdrojové kódy přibalených programů“: přesná verze a odkaz na zdrojový kód pro FFmpeg, mpv,
+  FFmpeg uvnitř PyAV, Qt, PySide6, Qt-ADS a LAME; zdrojové kódy na požádání poskytnu.
+- Úplný seznam balíčků Pythonu v instalátoru (55): `licenses/PYTHON_PACKAGES.md` s názvem, verzí a licencí,
+  plná znění v `licenses/python/`. Generuje ho rozšířený `licenses/prenes_licence.py` z metadat balíčků podle
+  skutečného obsahu sestavení (bez nové závislosti).
+- Copyright (C) 2026 Tomáš Kupec a upřesnění licence kódu na `GPL-3.0-only`: `LICENSE`, README, hlavičky
+  `SPDX-License-Identifier` ve všech vlastních zdrojových souborech.
+- `ADDITIONAL_PERMISSION.md`: dodatečné svolení podle čl. 7 GPLv3 pro spojení s běhovými knihovnami NVIDIA CUDA
+  a cuDNN a s Intel Math Kernel Library. Výslovně uvedeno, že knihovny NVIDIA a Intel, název a logo nejsou pod
+  GPL a mají vlastní podmínky.
+- README: ochranné známky třetích stran, poznámka o patentech kodeků H.264, H.265 a AAC, odstavec o tom, jak
+  aplikace vzniká.
+
+### Podmínky použití
+- Nové podmínky použití `TERMS.md` (anglicky) a `TERMS.cs.md` (česky): kdo aplikaci poskytuje, licence a cena,
+  bez záruky v rozsahu, v jakém to zákon dovoluje, nepřesnost přepisu, odpovědnost za obsah, licence modelů,
+  připojení k internetu, ochranné známky třetích stran, rozhodné právo.
+- V aplikaci: O aplikaci → Podmínky použití a odkaz v úvodním okně. Úvodní okno nově říká i to, že aplikace
+  jednou denně zjišťuje novou verzi na GitHubu a že to jde vypnout v Nastavení.
+- Instalátor má stránku s podmínkami použití (`installer\PODMINKY.txt`, dělá ho `nastroje\podminky_txt.py`).
+
+### Přesné časování
+- Vícejazyčný model MMS (licence CC BY-NC 4.0, jen nekomerční použití) je ve výchozím stavu **vypnutý**. Zapnout
+  jde v Nastavení → „Přesné časování i pro další jazyky“ po potvrzení upozornění na licenci; licenci uvádí
+  i dotaz na stažení modelu.
+- Jazyky bez vlastního modelu (jiné než cs, sk, en, de, es, fr, it, pl) zůstávají bez MMS na časech z přepisu –
+  bez chybové hlášky; dialog před přepisem to řekne předem a „Znovu zarovnat výběr“ jen upozorní.
+- Model Whisper large-v3-turbo se stahuje z nové adresy repozitáře (`dropbox-dash/faster-whisper-large-v3-turbo`,
+  dříve `mobiuslabsgmbh/…`). Revize i kontrolní součty jsou stejné, už stažený model se znovu nestahuje.
+
+### Ostatní
+- Export ProRes a ProRes 4444 už nezapisuje do snímků značku výrobce `apl0` (zůstává výchozí značka kodéru
+  FFmpeg). Kodek, profil, kvalita i průhlednost jsou beze změny.
+- Úklid: neutrální komentáře u výchozího stylu v `titulky.py`; staré návrhy ikon z dřívějších pracovních názvů
+  už nejsou v repozitáři.
+- Testy: 92 (nově licenční dokumenty a podmínky použití, model MMS, adresa modelu turbo).
+
 ## 1.0.0-beta.1 – 2026-11-01
 
 První veřejná BETA (navazuje na interní verze 1.0–1.6 níže).

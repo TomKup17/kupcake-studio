@@ -1,6 +1,9 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Okno „O aplikaci“: ztlumí aplikaci (jako ostatní překryvná okna) a uprostřed ukáže kartu – animovaný cupcake,
 logo, verze a datum sestavení, popis, autor, odkazy (Instagram, TikTok, web, GitHub – adresy v links.py),
-Co je nového (CHANGELOG.md), Licence (GPL-3.0 + THIRD_PARTY_LICENSES.md) a kopírování informací o systému.
+Co je nového (CHANGELOG.md), Licence (GPL-3.0 + ADDITIONAL_PERMISSION.md + THIRD_PARTY_LICENSES.md),
+Podmínky použití (TERMS.cs.md / TERMS.md) a kopírování informací o systému.
 Esc, ✕, Zavřít nebo klik mimo kartu = zavřít.
 """
 import re
@@ -76,12 +79,31 @@ def zmeny_verze(verze=VERZE):
     return "## " + casti[0].strip() if casti else t("oaplikaci.zmeny_chybi")
 
 
-def text_licence():
+def _dokument(nazev):
+    """Přibalený dokument (Markdown) pro zobrazení v aplikaci; odkazy na jiné soubory projektu vedou na GitHub
+    (v aplikaci by nikam nevedly), odkazy na oddíly téže stránky zůstanou jako obyčejný text."""
     try:
-        knihovny = (APP_DIR / "THIRD_PARTY_LICENSES.md").read_text(encoding="utf-8")
+        text = (APP_DIR / nazev).read_text(encoding="utf-8")
     except OSError:
-        knihovny = ""
-    return t("oaplikaci.licence_text") + "\n\n---\n\n" + knihovny
+        return ""
+    text = re.sub(r"(?m)^(\*\*English\*\*|\[English\]).*\n+", "", text)  # přepínač jazyka je jen pro GitHub
+    text = re.sub(r"\[([^\]]+)\]\(#[^)]*\)", r"\1", text)
+    if links.GITHUB:
+        return re.sub(r"\]\((?!https?://|mailto:)([^)\s]+)\)", rf"]({links.GITHUB}/blob/main/\1)", text)
+    return re.sub(r"\[([^\]]+)\]\((?!https?://|mailto:)[^)\s]+\)", r"\1", text)
+
+
+def text_licence():
+    """Licence: shrnutí v jazyce rozhraní, dodatečné svolení (ADDITIONAL_PERMISSION.md) a seznam knihoven."""
+    casti = [t("oaplikaci.licence_text"), _dokument("ADDITIONAL_PERMISSION.md"), _dokument("THIRD_PARTY_LICENSES.md")]
+    return "\n\n---\n\n".join(c for c in casti if c)
+
+
+def text_podminek():
+    """Podmínky použití – česky pro češtinu a slovenštinu, jinak anglicky."""
+    import i18n
+    soubory = ("TERMS.cs.md", "TERMS.md") if i18n.aktualni() in ("cs", "sk") else ("TERMS.md", "TERMS.cs.md")
+    return next((text for text in map(_dokument, soubory) if text), "") or t("oaplikaci.podminky_chybi")
 
 
 class OAplikaci(QDialog):
@@ -182,16 +204,19 @@ class OAplikaci(QDialog):
         cara.setFixedHeight(1)
         lay.addWidget(cara)
         lay.addSpacing(8)
-        dalsi = QHBoxLayout()
-        dalsi.setSpacing(4)
-        for klic, fn in (("zmeny", self.ukaz_zmeny), ("licence", self.ukaz_licence), ("system", self.kopiruj_info)):
-            b = QPushButton(t(f"oaplikaci.{klic}"))
-            b.setObjectName("odkazTlacitko")
-            b.setCursor(Qt.PointingHandCursor)
-            b.setFocusPolicy(Qt.NoFocus)
-            b.clicked.connect(fn)
-            dalsi.addWidget(b, 1)
-        lay.addLayout(dalsi)
+        # dva řádky odkazů: dokumenty (Co je nového · Licence · Podmínky použití) a kopírování informací o systému
+        for radek_odkazu in ((("zmeny", self.ukaz_zmeny), ("licence", self.ukaz_licence),
+                              ("podminky", self.ukaz_podminky)), (("system", self.kopiruj_info),)):
+            dalsi = QHBoxLayout()
+            dalsi.setSpacing(4)
+            for klic, fn in radek_odkazu:
+                b = QPushButton(t(f"oaplikaci.{klic}"))
+                b.setObjectName("odkazTlacitko")
+                b.setCursor(Qt.PointingHandCursor)
+                b.setFocusPolicy(Qt.NoFocus)
+                b.clicked.connect(fn)
+                dalsi.addWidget(b, 1)
+            lay.addLayout(dalsi)
         self.l_stav = QLabel("")
         self.l_stav.setObjectName("exportPopis")
         self.l_stav.setAlignment(Qt.AlignCenter)
@@ -233,6 +258,9 @@ class OAplikaci(QDialog):
 
     def ukaz_licence(self):
         self._ukaz_text(t("oaplikaci.licence"), text_licence())
+
+    def ukaz_podminky(self):
+        self._ukaz_text(t("oaplikaci.podminky"), text_podminek())
 
     def ukaz_hlavni(self):
         self.nadpis.setText(t("oaplikaci.nadpis"))

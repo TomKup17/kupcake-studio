@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Presety stylu titulků: pojmenované styly v presety.json v nastavení.
 
 Vestavěný preset VYCHOZI (výchozí Styl) je vždy k dispozici a nejde přepsat ani smazat. Preset ukládá

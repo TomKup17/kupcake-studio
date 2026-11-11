@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Kolečko myši nemění hodnoty polí jen tím, že nad nimi kurzor projíždí.
 
 Číselná pole, rozbalovací seznamy a posuvníky reagují na kolečko, až když do nich uživatel klikne

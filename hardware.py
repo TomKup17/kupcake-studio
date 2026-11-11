@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Rozpoznání hardwaru pro přepis a volba výpočtu.
 
 GPU: NVIDIA s CUDA – název a volná VRAM přes NVML (knihovna ovladače NVIDIA, bez načítání PyTorch),

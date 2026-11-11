@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Cupcake značky kupcake.studio: kresba (SVG) pro ikonu, logo i animaci.
 
 Kreslený styl – zaoblené tvary, výrazné obrysy, plochá barva s jedním jemným odleskem. Poleva modrá

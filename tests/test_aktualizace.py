@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Kontrola aktualizací: jen oznámení a odkaz, žádné stahování; podvržené odpovědi API se neprojeví."""
 import _zaklad  # noqa: F401
 

@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Odkazy aplikace na jednom místě – doplň sem své adresy, nic jiného měnit netřeba.
 
 Prázdný řetězec "" = tlačítko / funkce se nezobrazí (např. GitHub, dokud ho nevyplníš).

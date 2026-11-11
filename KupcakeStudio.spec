@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 # PyInstaller konfigurace pro KupcakeStudio.exe (spouští ji build.bat)
 #   .venv\Scripts\python.exe -m PyInstaller KupcakeStudio.spec --noconfirm
 # Výsledek: dist\KupcakeStudio\KupcakeStudio.exe – režim onedir (rychlý start), bez konzole, s ikonou.
@@ -29,6 +31,9 @@ datas = [
     ("licenses", "licenses"),  # plná znění licencí třetích stran (QtAds LGPL 2.1…)
     ("THIRD_PARTY_LICENSES.md", "."),
     ("LICENSE", "."),            # GPL-3.0 – O aplikaci → Licence
+    ("ADDITIONAL_PERMISSION.md", "."),  # copyright, GPL-3.0-only a dodatečné svolení (čl. 7 GPLv3)
+    ("TERMS.md", "."),           # podmínky použití – O aplikaci a úvodní okno (anglicky)
+    ("TERMS.cs.md", "."),        # … a česky
     ("CHANGELOG.md", "."),       # O aplikaci → Co je nového
 ]
 datas += collect_data_files("faster_whisper")  # model detekce řeči (silero VAD), malý

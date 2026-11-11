@@ -1,4 +1,6 @@
-"""Úvodní okno při prvním spuštění (beta): právní upozornění a souhlas „Rozumím“.
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
+"""Úvodní okno při prvním spuštění (beta): upozornění, odkazy na licenci a podmínky použití a souhlas „Rozumím“.
 
 Překryvná karta ve stylu aplikace (ztlumené pozadí, cupcake, štítek BETA). Tlačítko Začít se aktivuje až po
 zaškrtnutí „Rozumím“; potvrzení se uloží do nastavení. Znovu se okno ukáže jen při první spuštění nové hlavní
@@ -90,7 +92,7 @@ class Uvitani(QDialog):
         lay.addSpacing(4)
         odkazy = QHBoxLayout()
         odkazy.addStretch(1)
-        for klic, fn in (("uvitani.licence", lambda: self.stranky.setCurrentIndex(1)),
+        for klic, fn in (("uvitani.licence", self._ukaz_licenci), ("oaplikaci.podminky", self._ukaz_podminky),
                          ("uvitani.chyba", self._nahlasit)):
             b = QPushButton(t(klic))
             b.setObjectName("odkazTlacitko")
@@ -119,15 +121,14 @@ class Uvitani(QDialog):
         return s
 
     def _licence(self):
-        from o_aplikaci import text_licence
+        """Stránka s textem – Licence nebo Podmínky použití (obsah se doplní až při zobrazení)."""
         s = QWidget()
         lay = QVBoxLayout(s)
         lay.setContentsMargins(18, 16, 18, 16)
-        prohlizec = QTextBrowser()
+        self.prohlizec = prohlizec = QTextBrowser()
         prohlizec.setObjectName("oAplikaciText")
         prohlizec.setOpenExternalLinks(True)
         prohlizec.setMinimumHeight(420)
-        prohlizec.setMarkdown(text_licence())
         lay.addWidget(prohlizec)
         zpet = QPushButton(t("oaplikaci.zpet"))
         zpet.setObjectName("sekundarni")
@@ -142,6 +143,19 @@ class Uvitani(QDialog):
                                                  QSizePolicy.Preferred if i == index else QSizePolicy.Ignored)
         self.stranky.adjustSize()
         self.karta.adjustSize()
+
+    def _ukaz_text(self, markdown):
+        self.prohlizec.setMarkdown(markdown)
+        self.prohlizec.verticalScrollBar().setValue(0)
+        self.stranky.setCurrentIndex(1)
+
+    def _ukaz_licenci(self):
+        from o_aplikaci import text_licence
+        self._ukaz_text(text_licence())
+
+    def _ukaz_podminky(self):
+        from o_aplikaci import text_podminek
+        self._ukaz_text(text_podminek())
 
     def _nahlasit(self):
         from o_aplikaci import otevri_odkaz

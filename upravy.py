@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Úpravy titulků a slov na časové ose (seskupení, řezy, mazání, vkládání, schránka).
 
 Každá funkce nejdřív všechno ověří (a při problému vyhodí Chyba se srozumitelnou zprávou),

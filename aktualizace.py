@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Kontrola nové verze přes GitHub Releases (repozitář v links.GITHUB_REPO; prázdný = vypnuto).
 
 Bez otravování: nejvýš jednou za 24 hodin, na pozadí (start aplikace se nezdrží), jen přes HTTPS na

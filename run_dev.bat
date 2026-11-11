@@ -1,5 +1,7 @@
 @echo off
 chcp 65001 >nul
+rem kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+rem SPDX-License-Identifier: GPL-3.0-only
 cd /d "%~dp0"
 rem Spustí kupcake.studio přímo ze zdrojového kódu – změny v .py se projeví hned, bez sestavování.
 rem Okno konzole zůstane otevřené a ukáže případné chyby (traceback). Lze předat video: run_dev.bat video.mp4

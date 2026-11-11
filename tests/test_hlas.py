@@ -1,4 +1,6 @@
-﻿"""Načítání modelu Demucs: omezený unpickler přijme tvar oficiálního souboru a odmítne pickle s cizím kódem.
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
+"""Načítání modelu Demucs: omezený unpickler přijme tvar oficiálního souboru a odmítne pickle s cizím kódem.
 (Načítá PyTorch a Demucs – trvá několik sekund.) Je-li oficiální soubor stažený, ověří se i na něm."""
 import _zaklad  # noqa: F401  – izolace a sys.path
 

@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Přehrávač videa (libmpv) s živými ASS titulky – vykresluje je libass stejně jako export."""
 import ctypes
 import os

@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Úvodní splash screen: cupcake (assets/splash/cupcake.png), pod ním „kupcake.studio“ a „by iamtom.kup“.
 
 Okno bez rámečku a titulkové lišty (Qt.SplashScreen – bez vlastní položky na hlavním panelu), vycentrované

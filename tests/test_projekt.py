@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Projekty .kupcake: poškozené a podvržené soubory, atomické ukládání, hledání videa."""
 import _zaklad  # noqa: F401
 

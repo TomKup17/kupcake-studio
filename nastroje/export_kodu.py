@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Vypíše celý aktuální zdrojový kód kupcake.studio do jednoho souboru kod_programu.md v kořeni projektu.
 
 Spouští se přes export_kodu.bat (nebo  .venv\\Scripts\\python.exe nastroje\\export_kodu.py). Kód nemění.

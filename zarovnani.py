@@ -1,13 +1,16 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Přesné časování slov po přepisu.
 
 1. Forced alignment: každé slovo z Whisperu se zarovná ke zvuku akustickým modelem wav2vec2 (CTC) –
    stejný postup jako WhisperX, jen bez jeho závislostí. Pro jazyky s vlastním modelem (cs, sk, en, de,
-   es, fr, it, pl) se použije ten, ostatní jazyky vícejazyčný MMS (text se převede do latinky přes uroman).
+   es, fr, it, pl) se použije ten. Ostatní jazyky zůstanou na časech z Whisperu, dokud uživatel v Nastavení
+   nezapne vícejazyčný model MMS (jen nekomerční použití; text se pro něj převede do latinky přes uroman).
 2. Dorovnání začátku slova k nástupu zvuku – až o 60 ms dřív (onset podle náběhu energie).
 3. Dočištění: slova se nepřekrývají, každé je vidět aspoň MIN_ZOBRAZENI, mezi slovy je MIN_MEZERA.
 
 Modely se stahují při prvním použití do %LOCALAPPDATA%\\KupcakeStudio\\models\\zarovnani.
-Licence modelů: THIRD_PARTY_LICENSES.md (MMS je CC-BY-NC 4.0 – jen nekomerčně).
+Licence modelů: THIRD_PARTY_LICENSES.md (MMS je CC BY-NC 4.0 – jen nekomerčně, proto je ve výchozím stavu vypnutý).
 """
 import logging
 import json
@@ -16,6 +19,7 @@ import re
 import unicodedata
 import numpy as np
 
+import i18n
 from cesty import MODELY_DIR
 from i18n import t
 
@@ -45,8 +49,11 @@ MODELY = {  # jazyk → wav2vec2 CTC model (Apache-2.0); stejné, jaké použív
     "it": "jonatasgrosman/wav2vec2-large-xlsr-53-italian",
     "pl": "jonatasgrosman/wav2vec2-large-xlsr-53-polish",
 }
-MMS = "MahmoudAshraf/mms-300m-1130-forced-aligner"  # vícejazyčný (CC-BY-NC 4.0 – jen nekomerčně)
-POUZIT_MMS = True  # False = jazyky bez vlastního modelu zůstanou na časech z Whisperu (pro komerční použití)
+MMS = "MahmoudAshraf/mms-300m-1130-forced-aligner"  # vícejazyčný (CC BY-NC 4.0 – jen nekomerční použití)
+# Výchozí stav: MMS vypnutý – jazyky bez vlastního modelu zůstanou na časech z Whisperu. Uživatel ho může
+# zapnout v Nastavení (po potvrzení upozornění na nekomerční licenci); volba se ukládá do aplikace.ini.
+POUZIT_MMS = False
+KLIC_MMS = "zarovnani/mms"
 # potřebné soubory modelu (+ váhy) – z nich nastroje/vytvor_manifest.py sestaví manifest se SHA-256
 SOUBORY = ["config.json", "vocab.json", "preprocessor_config.json", "tokenizer_config.json",
            "special_tokens_map.json", "added_tokens.json"]
@@ -54,11 +61,31 @@ SOUBORY = ["config.json", "vocab.json", "preprocessor_config.json", "tokenizer_c
 _zarovnavace = {}
 
 
+class BezModelu(LookupError):
+    """Pro jazyk není model přesného časování (a MMS není zapnutý) – zůstávají časy z Whisperu."""
+
+
+def mms_zapnuto():
+    """Smí se použít vícejazyčný model MMS? (Nastavení; výchozí POUZIT_MMS = ne.)"""
+    return str(i18n.nastaveni().value(KLIC_MMS, "true" if POUZIT_MMS else "false")).lower() == "true"
+
+
+def nastav_mms(zapnout):
+    s = i18n.nastaveni()
+    s.setValue(KLIC_MMS, "true" if zapnout else "false")
+    s.sync()
+
+
+def ma_model(jazyk):
+    """Jde pro jazyk udělat přesné časování? (vlastní model, nebo zapnutý MMS)"""
+    return jazyk in MODELY or mms_zapnuto()
+
+
 def repo_pro(jazyk):
     if jazyk in MODELY:
         return MODELY[jazyk]
-    if not POUZIT_MMS:
-        raise LookupError(f"pro jazyk „{jazyk}“ není model s volnou licencí")
+    if not mms_zapnuto():
+        raise BezModelu(f"pro jazyk „{jazyk}“ není model přesného časování")
     return MMS
 
 
@@ -69,7 +96,9 @@ def _stahni(repo, log):
     cil = MODELY_DIR / "zarovnani" / repo.replace("/", "--")
     if not stahovani.je_pripraveno(repo, cil):
         log(t("log.zarovnani_stahuji", model=repo))
-        stahovani.priprav_repo(repo, cil, t("stahovani.zarovnani", model=repo), log=log)
+        # u MMS dotaz na stažení připomene nekomerční licenci
+        popis = t("stahovani.zarovnani_mms" if repo == MMS else "stahovani.zarovnani", model=repo)
+        stahovani.priprav_repo(repo, cil, popis, log=log)
     return cil
 
 

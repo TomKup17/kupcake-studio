@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """FFmpeg a soubory: argumenty jako seznam bez shellu, jen místní soubory, zdroj se nepřepisuje, ASS escapování."""
 import _zaklad  # noqa: F401
 
@@ -36,6 +38,7 @@ class TestPrikaz(unittest.TestCase):
                 cmd = sestav_prikaz(volby, video, Path("C:/out/vystup.mp4"), (1080, 1920, 10.0), 30.0, (1.0, 3.0))
             self.assertIsInstance(cmd, list)
             self.assertTrue(all(isinstance(a, str) for a in cmd))
+            self.assertNotIn("-vendor", cmd)  # ProRes bez značky výrobce apl0 (výchozí značka kodéru FFmpeg)
             self.assertEqual(cmd[0], "ffmpeg")
             self.assertEqual(cmd[-1], str(Path("C:/out/vystup.mp4")))
             if volby.co != "pruhledne":

@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Panel s možnostmi exportu: ztlumí aplikaci (stejná vrstva jako překrytí s cupcakem) a uprostřed ukáže kartu
 „● EXPORT“ – co exportovat, rychlé presety, základní nastavení, soubor a shrnutí.
 

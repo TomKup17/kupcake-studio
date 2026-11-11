@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Bezpečné stahování modelů: jen HTTPS z oficiálních zdrojů (huggingface.co, dl.fbaipublicfiles.com),
 pevná revize z manifest_modelu.py, kontrola velikosti a SHA-256 každého souboru. Soubor, který nesedí,
 se smaže a uživatel dostane srozumitelnou chybu.

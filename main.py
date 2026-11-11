@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """kupcake.studio – automatické titulky (přepis, editor, přehrávač s živými titulky, styly, export)."""
 import json
 import logging
@@ -1102,6 +1104,13 @@ class Okno(QMainWindow):
         self.akce_rezimu[rezim_prepisu()].setChecked(True)
         self.akce_bezi_na = m.addAction("")
         self.akce_bezi_na.setEnabled(False)  # jen informace
+        # vícejazyčný model MMS pro přesné časování – jen nekomerční použití, proto výchozí vypnuto
+        import zarovnani
+        self.akce_mms = m.addAction("")
+        self.akce_mms.setCheckable(True)
+        self.akce_mms.setChecked(zarovnani.mms_zapnuto())
+        prekladej(lambda: self.akce_mms.setText(t("mms.nastaveni")))
+        self.akce_mms.toggled.connect(self.prepni_mms)
         m.addSeparator()
         self.akce_pripominky = m.addAction("")
         self.akce_pripominky.setCheckable(True)
@@ -1334,6 +1343,18 @@ class Okno(QMainWindow):
         s = i18n.nastaveni()
         s.setValue("aktualizace/zapnuto", "true" if zapnuto else "false")
         s.sync()
+
+    def prepni_mms(self, zapnout):
+        """Nastavení → přesné časování i pro jazyky bez vlastního modelu (vícejazyčný model MMS). Model je pod
+        licencí CC BY-NC 4.0 (jen nekomerční použití) – zapne se až po potvrzení upozornění."""
+        import zarovnani
+        if zapnout and QMessageBox.question(self, NAZEV, t("mms.upozorneni"), QMessageBox.Yes | QMessageBox.No,
+                                            QMessageBox.No) != QMessageBox.Yes:
+            self.akce_mms.blockSignals(True)
+            self.akce_mms.setChecked(False)
+            self.akce_mms.blockSignals(False)
+            return
+        zarovnani.nastav_mms(zapnout)
 
     def uvitani(self):
         """Při prvním spuštění (nové hlavní verze) právní upozornění bety se souhlasem. Vrátí False = ukončit."""
@@ -1904,6 +1925,10 @@ class Okno(QMainWindow):
         vybrana = sorted((s for s in self._vybrana() if id(s) not in zamcena), key=lambda s: s.start)
         if not vybrana:
             self.varuj(t("varovani.zarovnat_nic"))
+            return
+        import zarovnani
+        if not zarovnani.ma_model(self.jazyk_prepisu):  # jazyk bez vlastního modelu a MMS není zapnutý
+            self.varuj(t("varovani.zarovnat_bez_modelu"))
             return
         pred = self.snimek_stavu()
         posun, video, jazyk, zvuk = self.posun_zvuku, self.video, self.jazyk_prepisu, self.zvuk

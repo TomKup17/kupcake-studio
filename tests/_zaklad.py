@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Společný základ testů: izolované APPDATA/LOCALAPPDATA (nastavení ani modely uživatele se nedotknou)
 a kořen projektu v sys.path. Importovat jako první v každém testovacím modulu.
 

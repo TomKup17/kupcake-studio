@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Menší dialogy: výběr jazyka řeči a možností přepisu (přesnost, odhad doby, zařízení)."""
 from PySide6.QtWidgets import QCheckBox, QComboBox, QDialog, QDialogButtonBox, QLabel, QVBoxLayout
 
@@ -114,10 +116,17 @@ def vyber_jazyk_reci(rodic, nazev_videa="", delka=0.0):
     lay.addWidget(info)
 
     def obnov():
+        import zarovnani
         klic = model.currentData()
         vysvetleni.setText(t(f"presnost.{klic}.popis"))
-        info.setText(popis_prepisu(klic, delka, presne.isChecked(), hw))
+        # zvolený jazyk bez modelu přesného časování (a MMS není zapnutý) → zůstanou časy z přepisu
+        jde = volba.currentData() == AUTO or zarovnani.ma_model(volba.currentData())
+        text = popis_prepisu(klic, delka, presne.isChecked() and jde, hw)
+        if presne.isChecked() and not jde:
+            text += "\n" + t("reci.presne_bez_modelu")
+        info.setText(text)
     model.currentIndexChanged.connect(obnov)
+    volba.currentIndexChanged.connect(obnov)
     presne.toggled.connect(obnov)
     obnov()
 

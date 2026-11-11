@@ -1,5 +1,7 @@
 @echo off
 chcp 65001 >nul
+rem kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+rem SPDX-License-Identifier: GPL-3.0-only
 setlocal
 cd /d "%~dp0"
 rem Sestaví KupcakeStudio.exe (PyInstaller) a instalátor KupcakeStudio-Setup-<verze>.exe (Inno Setup).
@@ -63,6 +65,8 @@ if not defined ISCC (
     echo Přeskočeno – chybí Inno Setup. Aplikace je ve složce dist\KupcakeStudio.
     goto :konec
 )
+rem podmínky použití pro stránku instalátoru: prostý text z TERMS.cs.md
+"%PY%" nastroje\podminky_txt.py || goto :chyba
 rem staré části téže verze pryč – jinak by zbyla třeba -3.bin z dřívějšího většího sestavení
 del /q "dist\KupcakeStudio-Setup-%VERZE%-*.bin" 2>nul
 "%ISCC%" /Qp /DAppVersion=%VERZE% /DAppVersionNum=%VERZE_CISLO% "installer\KupcakeStudio.iss" || goto :chyba

@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Vzhled aplikace kupcake.studio na jednom místě: paleta, písma, stylesheet, ikony, záře a animace.
 
 Barvy značky iamtom.kup střídmě, jako akcenty – dvě role, které se nemíchají:

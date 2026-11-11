@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Přepis řeči na slova s časy (faster-whisper large-v3, CUDA; jazyk zvolený nebo rozpoznaný).
 
 Postup: zvuk (mono 16 kHz, normalizovaná hlasitost; volitelně jen hlas oddělený Demucsem) → Whisper
@@ -170,9 +172,11 @@ def prepis(video, jazyk=None, progress=lambda p, faze=None: None, log=_log, pres
     vys["zarizeni"] = hardware.popis(zarizeni, hw)
     vys["varovani"] = varovani
     vys["zarovnano"] = False
-    if presne and vys["slova"]:
+    if presne and vys["slova"] and not zarovnani.ma_model(vys["jazyk"]):
+        # jazyk bez vlastního modelu a MMS není zapnutý – není to chyba, zůstanou časy z Whisperu
+        log(t("log.zarovnani_bez_modelu", jazyk=vys["jazyk"]))
+    elif presne and vys["slova"]:
         try:
-            import zarovnani
             log(t("log.zarovnani"))
             zarovnani.zarovnej(vys["slova"], vys["useky"], audio, vys["jazyk"], log, faze.zacni("zarovnani"),
                                lambda: faze.zacni("docisteni"))

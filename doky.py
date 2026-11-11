@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Volně přesouvatelné sekce (PySide6-QtAds, Advanced Docking System, LGPL 2.1).
 
 Sekce (Titulky, Náhled, Nastavení, Časová osa) jde chytit za záhlaví a ukotvit jinam, vložit jako záložku,

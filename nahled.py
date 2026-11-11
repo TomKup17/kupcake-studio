@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Živý náhled: snímek z videa + titulek vykreslený přes libass (stejně jako při exportu)."""
 import subprocess
 

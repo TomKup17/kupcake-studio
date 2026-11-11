@@ -3,7 +3,7 @@
 **English** | [Čeština](README.cs.md)
 
 An app by iamtom.kup. The display name is always written `kupcake.studio`; the technical name
-(files, folders) is `KupcakeStudio`. Earlier names: **Spellcast** (up to 1.1), **tkStudio** (1.2).
+(files, folders) is `KupcakeStudio`. Earlier working names: Spellcast, tkStudio.
 
 > **Name and logo:** the name **kupcake.studio**, the cupcake logo and icon and the iamtom.kup brand
 > **are not covered by the code licence** – they must not be used for modified versions or other projects
@@ -36,7 +36,9 @@ kupcake.studio is free and **provided as is, without any warranty** – express 
 warranty of merchantability or fitness for a particular purpose. The author is not liable for damage caused
 by using it, to the extent permitted by law. See sections 15 and 16 of the
 [GNU GPL v3](https://www.gnu.org/licenses/gpl-3.0.html) licence (full text in [LICENSE](LICENSE)).
-In the app: About → "Provided without warranty · GPL-3.0".
+In the app: About → "Provided without warranty · GPL-3.0". The complete **Terms of Use** are in
+[TERMS.md](TERMS.md) (Czech: [TERMS.cs.md](TERMS.cs.md)); the app shows them in About and in the welcome
+window, the installer on its licence page.
 
 ## Privacy
 
@@ -113,11 +115,41 @@ downloaded models and settings; `.kupcake` projects and exported videos always s
 
 ## Licence
 
-The kupcake.studio code is licensed under the **GNU GPL v3** ([LICENSE](LICENSE)). Third-party libraries,
-tools, fonts (OFL 1.1) and models and their licences are listed in
-[THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md), full texts in the `licenses/` folder (also bundled with
-the installation). Note: the Meta MMS model used for alignment in less common languages is CC BY-NC 4.0 –
-non-commercial use only (see THIRD_PARTY_LICENSES.md).
+Copyright (C) 2026 Tomáš Kupec
+
+The kupcake.studio source code is free software under the **GNU General Public License, version 3 only**
+(`GPL-3.0-only`) – full text in [LICENSE](LICENSE). Every source file carries the copyright line and the
+`SPDX-License-Identifier: GPL-3.0-only` header.
+
+Additional permission (also in [ADDITIONAL_PERMISSION.md](ADDITIONAL_PERMISSION.md)):
+
+> Additional permission under GNU GPL version 3 section 7: If you modify this Program, or any covered work, by linking or combining it with the NVIDIA CUDA and cuDNN runtime libraries or the Intel Math Kernel Library (or modified versions of those libraries), containing parts covered by the terms of their respective licenses, the licensors of this Program grant you additional permission to convey the resulting work.
+
+**What the GPL does not cover** – these parts have their own terms:
+
+- **third-party programs, libraries, fonts and models.** Each has its own licence. The list with exact
+  versions is in [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md) (in Czech), full texts are in the
+  `licenses/` folder (also bundled with the installation), and the complete list of bundled Python packages
+  is in [licenses/PYTHON_PACKAGES.md](licenses/PYTHON_PACKAGES.md),
+- in particular the **NVIDIA** (CUDA, cuDNN) and **Intel** (oneMKL, OpenMP) runtime libraries. They are
+  proprietary, they are **not under the GPL** and may be used and redistributed only under their own licences,
+- the **name kupcake.studio and the logo** (see the note at the top of this page).
+
+**Source code of the bundled programs:** exact versions and links to the source code of FFmpeg, mpv, the
+FFmpeg inside PyAV, Qt, Qt-ADS and LAME are in
+[THIRD_PARTY_LICENSES.md, section 2](THIRD_PARTY_LICENSES.md#2-zdrojové-kódy-přibalených-programů).
+I will provide the source code on request.
+
+**Meta MMS model** (precise word timing for languages without their own model) is CC BY-NC 4.0 –
+non-commercial use only. It is switched off by default; it can be turned on in Settings after confirming
+the licence notice.
+
+### Trademarks and patents
+
+ProRes, TikTok, Instagram, YouTube, DaVinci Resolve, Premiere, CapCut, NVIDIA and other product names
+mentioned here are trademarks of their respective owners. They are used only to describe compatibility;
+kupcake.studio is not affiliated with, endorsed by or sponsored by any of them. The H.264, H.265 and AAC
+codecs may be subject to patent licences in some countries.
 
 ## Features (version 1.0.0-beta.1)
 
@@ -176,6 +208,11 @@ Icon: `python ikona/ikona.py nahledy` (drafts in `icon_drafts/`), `python ikona/
 
 The list of changes by version is in [CHANGELOG.md](CHANGELOG.md) (in Czech).
 
+## How the app is made
+
+I design kupcake.studio, decide how it works and looks, direct its development and test it myself. The code
+is written with the help of an AI assistant (Claude Code).
+
 ## Development
 
 - **`run_dev.bat`** – runs kupcake.studio straight from the source code. Just save changes in the `.py`
@@ -189,6 +226,12 @@ The list of changes by version is in [CHANGELOG.md](CHANGELOG.md) (in Czech).
   [shinchiro/mpv-winbuild-cmake → Releases](https://github.com/shinchiro/mpv-winbuild-cmake/releases)
   and extract `libmpv-2.dll` into the `mpv\` folder. The app also starts from source without it, but the
   preview then shows single frames without playback (`nahled.py`); building the installer needs it.
+  The released installer uses the build of 21 October 2026 (`mpv-dev-x86_64-20261021-git-e471496c56.7z`);
+  if you bundle a different one, update its version and source link in `THIRD_PARTY_LICENSES.md`.
+- **Licence list:** after changing dependencies (ideally after a build) run
+  `.venv\Scripts\python.exe licenses\prenes_licence.py` – it regenerates
+  `licenses/PYTHON_PACKAGES.md` and the licence texts in `licenses/python/` from what is really in the build.
+  `nastroje\podminky_txt.py` turns `TERMS.cs.md` into the installer's terms page (`build.bat` runs it).
 - **Security tests** in the `tests/` folder (downloads and redirects, model integrity, projects, FFmpeg,
   updates, privacy; they download nothing and don't touch the user's settings):
   `.venv\Scripts\python.exe -m unittest discover -s tests -v` (`python -m pytest tests` works too).

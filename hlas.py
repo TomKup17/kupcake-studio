@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Oddělení hlasu od hudby (Demucs htdemucs, MIT) – pro videa s hudbou v pozadí, která mate přepis
 i časování. Model (~80 MB) se stáhne při prvním použití do %LOCALAPPDATA%\\KupcakeStudio\\models\\demucs.
 

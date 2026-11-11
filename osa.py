@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Časová osa: slova jako boxy (QGraphicsScene), zvuková vlna, měřítko, přehrávací hlava s časovým kódem,
 smyčka, značky a přichytávání. Úpravy struktury (skupiny, řezy, mazání…) dělá okno přes modul upravy."""
 import math

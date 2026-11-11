@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Logy a zachytávání chyb.
 
 - Log do %LOCALAPPDATA%\\KupcakeStudio\\logs\\kupcake.log s rotací (4 × 1 MB, tedy nejvýš ~4 MB).

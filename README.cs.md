@@ -3,7 +3,7 @@
 [English](README.md) | **Čeština**
 
 Aplikace značky iamtom.kup. Zobrazovaný název se píše vždy `kupcake.studio`, technický název
-(soubory, složky) je `KupcakeStudio`. Dřívější názvy: **Spellcast** (do 1.1), **tkStudio** (1.2).
+(soubory, složky) je `KupcakeStudio`. Dřívější pracovní názvy: Spellcast, tkStudio.
 
 > **Název a logo:** název **kupcake.studio**, logo a ikona s cupcakem a značka iamtom.kup **nejsou
 > součástí licence kódu** – nesmí se používat pro upravené verze ani jiné projekty bez souhlasu autora.
@@ -33,7 +33,9 @@ kupcake.studio je zdarma a **poskytuje se tak, jak je, bez jakékoli záruky** �
 včetně záruky prodejnosti nebo vhodnosti pro určitý účel. Autor neodpovídá za škody vzniklé jejím používáním,
 v rozsahu, který dovoluje zákon. Podrobně oddíly 15 a 16 licence
 [GNU GPL v3](https://www.gnu.org/licenses/gpl-3.0.html) (plné znění v souboru [LICENSE](LICENSE)).
-V aplikaci: O aplikaci → „Poskytováno bez záruky · GPL-3.0“.
+V aplikaci: O aplikaci → „Poskytováno bez záruky · GPL-3.0“. Úplné **podmínky použití** jsou v souboru
+[TERMS.cs.md](TERMS.cs.md) (anglicky [TERMS.md](TERMS.md)); aplikace je ukazuje v okně O aplikaci
+a v úvodním okně, instalátor na stránce s licencí.
 
 ## Soukromí
 
@@ -106,10 +108,40 @@ a nastavení; projekty `.kupcake` a exportovaná videa zůstanou vždy.
 
 ## Licence
 
-Kód kupcake.studio je pod licencí **GNU GPL v3** ([LICENSE](LICENSE)). Knihovny, nástroje, písma (OFL 1.1)
-a modely třetích stran a jejich licence jsou v [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md), plná znění
-ve složce `licenses/` (přibalená i v instalaci). Pozor: model Meta MMS pro zarovnání u méně častých jazyků je
-CC BY-NC 4.0 – jen nekomerční použití (viz THIRD_PARTY_LICENSES.md).
+Copyright (C) 2026 Tomáš Kupec
+
+Zdrojový kód kupcake.studio je svobodný software pod licencí **GNU General Public License verze 3**
+(jen verze 3, `GPL-3.0-only`) – plné znění v souboru [LICENSE](LICENSE). Každý zdrojový soubor nese řádek
+s copyrightem a hlavičku `SPDX-License-Identifier: GPL-3.0-only`.
+
+Dodatečné svolení (také v souboru [ADDITIONAL_PERMISSION.md](ADDITIONAL_PERMISSION.md)):
+
+> Additional permission under GNU GPL version 3 section 7: If you modify this Program, or any covered work, by linking or combining it with the NVIDIA CUDA and cuDNN runtime libraries or the Intel Math Kernel Library (or modified versions of those libraries), containing parts covered by the terms of their respective licenses, the licensors of this Program grant you additional permission to convey the resulting work.
+
+**Co pod GPL nespadá** – tyto části mají vlastní podmínky:
+
+- **programy, knihovny, písma a modely třetích stran.** Každá má vlastní licenci. Seznam s přesnými verzemi
+  je v [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md), plná znění ve složce `licenses/` (přibalená
+  i v instalaci) a úplný seznam přibalených balíčků Pythonu v
+  [licenses/PYTHON_PACKAGES.md](licenses/PYTHON_PACKAGES.md),
+- zejména běhové knihovny **NVIDIA** (CUDA, cuDNN) a **Intel** (oneMKL, OpenMP). Jsou proprietární,
+  **nejsou pod GPL** a smí se používat a šířit jen za podmínek vlastních licencí,
+- **název kupcake.studio a logo** (viz poznámka nahoře na této stránce).
+
+**Zdrojové kódy přibalených programů:** přesné verze a odkazy na zdrojový kód FFmpeg, mpv, FFmpeg uvnitř
+PyAV, Qt, Qt-ADS a LAME jsou v
+[THIRD_PARTY_LICENSES.md, oddíl 2](THIRD_PARTY_LICENSES.md#2-zdrojové-kódy-přibalených-programů).
+Zdrojové kódy na požádání poskytnu.
+
+**Model Meta MMS** (přesné časování slov v jazycích bez vlastního modelu) je CC BY-NC 4.0 – jen pro
+nekomerční použití. Ve výchozím stavu je vypnutý; zapnout jde v Nastavení po potvrzení upozornění na licenci.
+
+### Ochranné známky a patenty
+
+ProRes, TikTok, Instagram, YouTube, DaVinci Resolve, Premiere, CapCut, NVIDIA a další zmíněné názvy
+produktů jsou ochranné známky svých vlastníků. Jsou použité jen k popisu kompatibility; aplikace
+kupcake.studio s nimi není spojená, není jimi schválená ani podporovaná. Kodeky H.264, H.265 a AAC mohou v některých
+zemích podléhat patentovým licencím.
 
 ## Co umí (verze 1.0.0-beta.1)
 
@@ -164,6 +196,11 @@ Ikona: `python ikona/ikona.py nahledy` (návrhy v `icon_drafts/`), `python ikona
 
 Seznam změn po verzích je v [CHANGELOG.md](CHANGELOG.md).
 
+## Jak aplikace vzniká
+
+kupcake.studio navrhuji, rozhoduji o tom, jak funguje a vypadá, řídím její vývoj a testuji ji já. Kód vzniká
+s pomocí AI asistenta (Claude Code).
+
 ## Vývoj
 
 - **`run_dev.bat`** – spustí kupcake.studio přímo ze zdrojového kódu. Změny v `.py` souborech stačí uložit
@@ -177,6 +214,12 @@ Seznam změn po verzích je v [CHANGELOG.md](CHANGELOG.md).
   [shinchiro/mpv-winbuild-cmake → Releases](https://github.com/shinchiro/mpv-winbuild-cmake/releases)
   a `libmpv-2.dll` z něj vybal do složky `mpv\`. Bez ní se aplikace ze zdrojáků spustí také, náhled
   ale ukáže jen jednotlivé snímky bez přehrávání (`nahled.py`); sestavení instalátoru ji potřebuje.
+  Vydaný instalátor používá sestavení z 21. 10. 2026 (`mpv-dev-x86_64-20261021-git-e471496c56.7z`);
+  když přibalíš jiné, uprav jeho verzi a odkaz na zdroj v `THIRD_PARTY_LICENSES.md`.
+- **Seznam licencí:** po změně závislostí (nejlépe po sestavení) spusť
+  `.venv\Scripts\python.exe licenses\prenes_licence.py` – znovu vytvoří
+  `licenses/PYTHON_PACKAGES.md` a texty licencí v `licenses/python/` podle skutečného obsahu sestavení.
+  `nastroje\podminky_txt.py` dělá z `TERMS.cs.md` stránku s podmínkami pro instalátor (spouští ho `build.bat`).
 - **Bezpečnostní testy** ve složce `tests/` (stahování a přesměrování, integrita modelů, projekty, FFmpeg,
   aktualizace, soukromí; nic nestahují, nastavení uživatele se nedotknou):
   `.venv\Scripts\python.exe -m unittest discover -s tests -v` (funguje i `python -m pytest tests`).

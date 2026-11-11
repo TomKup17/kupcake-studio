@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Samokontrola sestavené aplikace: KupcakeStudio.exe --selftest <video> <protokol.txt>
 
 Ověří, že build obsahuje vše potřebné (rozhraní, dokování, jazyky, fonty, ikony, licence, přepis na GPU,

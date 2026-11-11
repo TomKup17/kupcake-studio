@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Stahování modelů: povolené adresy a přesměrování, integrita (SHA-256, velikost), navázání, značka .hotovo."""
 import _zaklad  # noqa: F401  – izolace a sys.path
 

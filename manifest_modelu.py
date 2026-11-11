@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Pevné revize a SHA-256 modelů, které aplikace stahuje. VYGENEROVÁNO nastroje/vytvor_manifest.py –
 neupravovat ručně. Každý stažený soubor se proti tomuto seznamu ověří (stahovani.py)."""
 
@@ -13,7 +15,7 @@ HUGGINGFACE = {
             'model.bin': (3087284237, '69f74147e3334731bc3a76048724833325d2ec74642fb52620eda87352e3d4f1'),
         },
     },
-    'mobiuslabsgmbh/faster-whisper-large-v3-turbo': {
+    'dropbox-dash/faster-whisper-large-v3-turbo': {
         "revize": '0a363e9161cbc7ed1431c9597a8ceaf0c4f78fcf',
         "soubory": {
             'config.json': (2263, 'b0253ea6c0d3bea6b1e19e91a02acfd3b53f4467362efcb5a3e6b16c9b3a9b7e'),

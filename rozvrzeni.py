@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Sbalitelné skupiny v sekci Nastavení. (Rozvržení sekcí samotných řeší doky.py.)"""
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QColor, QPainter

@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Ikona kupcake.studio: PNG náhledy variant a export do .ico. Kresba cupcaku je v kupcake.py.
 
   python ikona/ikona.py nahledy        -> icon_drafts/kupcake_varianta_*.svg + .png

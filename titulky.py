@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Styl titulků, seskupení slov do titulků a generování ASS."""
 import json
 import os
@@ -13,7 +15,7 @@ MIN_ZOBRAZENI = 0.12  # zvýraznění kratší než tohle neproblikne samo – s
 
 @dataclass
 class Styl:
-    # výchozí = profil podle Captions (žlutá Montserrat ExtraBold, černý rozmazaný stín)
+    # výchozí styl: žlutá Montserrat ExtraBold, velká písmena, černý rozmazaný stín
     font: str = "Montserrat ExtraBold"
     tucne: bool = False
     velikost: float = 0.10          # velikost písma jako podíl šířky videa
@@ -22,7 +24,7 @@ class Styl:
     obrys: float = 0.0              # tloušťka obrysu jako podíl velikosti písma
     stin: bool = True
     barva_stinu: str = "000000"
-    stin_rozmazani: int = 23        # stupnice Captions 0–100 (0 = ostrý stín)
+    stin_rozmazani: int = 23        # míra rozmazání stínu 0–100 (0 = ostrý stín)
     stin_x: int = 0                 # posun stínu v px při šířce videa 1080
     stin_y: int = 0
     pozadi: bool = False

@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Průběh dlouhé práce po fázích s vahou a její zrušení.
 
 Práce běží ve vlákně (main.Uloha) a hlásí průběh voláním progress(podíl, faze=None). Fáze mají váhu

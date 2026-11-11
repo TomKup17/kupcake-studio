@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Export přes FFmpeg: video s vypálenými titulky (H.264 / H.265 / MOV ProRes), průhledné titulky
 (MOV ProRes 4444 s alfa kanálem) a titulky jako soubor (SRT / VTT / ASS – zapisuje je main.py).
 
@@ -155,8 +157,8 @@ def _argumenty_kodeku(volby, jmeno):
     q = KVALITA[jmeno][volby.kvalita]
     if jmeno == "prores_ks":
         if volby.co == "pruhledne":
-            return ["-c:v", "prores_ks", "-profile:v", "4444", "-pix_fmt", "yuva444p10le", "-vendor", "apl0"]
-        return ["-c:v", "prores_ks", "-profile:v", str(q), "-pix_fmt", "yuv422p10le", "-vendor", "apl0"]
+            return ["-c:v", "prores_ks", "-profile:v", "4444", "-pix_fmt", "yuva444p10le"]
+        return ["-c:v", "prores_ks", "-profile:v", str(q), "-pix_fmt", "yuv422p10le"]
     if jmeno.endswith("_nvenc"):
         a = ["-c:v", jmeno, "-preset", "p5", "-tune", "hq", "-rc", "vbr", "-cq", str(q), "-b:v", "0"]
     else:

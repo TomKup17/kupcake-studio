@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Jazyky řeči, které umí Whisper (faster-whisper large-v3), pro výběr jazyka přepisu."""
 from PySide6.QtCore import QLocale
 

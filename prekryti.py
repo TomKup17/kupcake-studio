@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Velká překryvná obrazovka zpracování: cupcake se plní zdola nahoru podle skutečného průběhu.
 
 Překrytí je samostatné průhledné okno nad hlavním oknem (ne jen widget uvnitř): přehrávač mpv kreslí do

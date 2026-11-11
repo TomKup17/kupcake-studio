@@ -1,3 +1,5 @@
+# kupcake.studio – Copyright (C) 2026 Tomáš Kupec
+# SPDX-License-Identifier: GPL-3.0-only
 """Soukromí: knihovny Hugging Face jsou offline a bez telemetrie; hlášení chyby neobsahuje uživatelské jméno."""
 import _zaklad  # noqa: F401
 
