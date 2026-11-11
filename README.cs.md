@@ -15,7 +15,7 @@ s časovou osou po slovech, živý náhled v přehrávači mpv a vypálení do v
 
 ## Beta verze
 
-Tohle je **veřejná testovací verze** (`1.0.0-beta.1`). Aplikace je funkční, ale **může obsahovat chyby**
+Tohle je **veřejná testovací verze** (`1.0.0-beta.2`). Aplikace je funkční, ale **může obsahovat chyby**
 a některé funkce se ještě mohou změnit. Při prvním spuštění se ukáže úvodní okno s tímto upozorněním –
 pokračuje se až po zaškrtnutí „Rozumím“ (znovu se ukáže jen u nové hlavní verze, např. přechod na 1.0).
 
@@ -143,7 +143,7 @@ produktů jsou ochranné známky svých vlastníků. Jsou použité jen k popisu
 kupcake.studio s nimi není spojená, není jimi schválená ani podporovaná. Kodeky H.264, H.265 a AAC mohou v některých
 zemích podléhat patentovým licencím.
 
-## Co umí (verze 1.0.0-beta.1)
+## Co umí (verze 1.0.0-beta.2)
 
 - projekty `.kupcake` (Soubor → Uložit projekt, Ctrl+S / Ctrl+O, Nedávné projekty, dvojklik na soubor),
   upozornění na neuložené změny, automatické uložení každé 2 minuty a obnova po pádu (`projekt.py`),

@@ -2,7 +2,7 @@
 
 **English** | [Čeština](TERMS.cs.md)
 
-Last updated: 11 November 2026
+Last updated: 12 November 2026
 
 These terms apply to the kupcake.studio app. By installing or using the app you agree to them.
 
@@ -21,6 +21,10 @@ The app also contains third-party programs and libraries (for example FFmpeg, mp
 and Intel runtime libraries). Each of them has its own licence, listed in `THIRD_PARTY_LICENSES.md`; the
 NVIDIA, Intel and Microsoft libraries are proprietary and are not covered by the GPL. The name kupcake.studio
 and its logo are not part of the code licence.
+
+The NVIDIA libraries (CUDA, cuDNN) are provided by NVIDIA under its own licence agreements; their full texts
+are in the `licenses` folder. You may use these libraries only together with this app. You must not distribute
+them separately, modify them or reverse engineer them.
 
 ## 3. No warranty
 

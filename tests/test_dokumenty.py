@@ -75,6 +75,9 @@ class TestPodminky(unittest.TestCase):
         self.assertIn("v rozsahu, v jakém to zákon dovoluje", cs)
         self.assertIn("Czech Republic", en)
         self.assertIn("České republiky", cs)
+        # knihovny NVIDIA: jen s aplikací, za podmínek licencí NVIDIA
+        self.assertIn("You may use these libraries only together with this app", en)
+        self.assertIn("Tyto knihovny smíš používat jen spolu s touto aplikací", cs)
 
     def test_stranka_instalatoru_odpovida_podminkam(self):
         import sys

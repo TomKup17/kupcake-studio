@@ -17,7 +17,7 @@ FFmpeg (NVENC).
 
 ## Beta version
 
-This is a **public test version** (`1.0.0-beta.1`). The app works, but it **may contain bugs** and some
+This is a **public test version** (`1.0.0-beta.2`). The app works, but it **may contain bugs** and some
 features may still change. On first launch a welcome window shows this notice – you continue only after
 ticking **"I understand"** (it shows again only for a new major version, e.g. the move to 1.0).
 
@@ -151,7 +151,7 @@ mentioned here are trademarks of their respective owners. They are used only to 
 kupcake.studio is not affiliated with, endorsed by or sponsored by any of them. The H.264, H.265 and AAC
 codecs may be subject to patent licences in some countries.
 
-## Features (version 1.0.0-beta.1)
+## Features (version 1.0.0-beta.2)
 
 - `.kupcake` projects (File → Save project, Ctrl+S / Ctrl+O, Recent projects, double-click the file),
   unsaved-changes warning, automatic save every 2 minutes and recovery after a crash (`projekt.py`),

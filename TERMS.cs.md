@@ -2,7 +2,7 @@
 
 [English](TERMS.md) | **Čeština**
 
-Poslední změna: 11. 11. 2026
+Poslední změna: 12. 11. 2026
 
 Tyto podmínky platí pro aplikaci kupcake.studio. Instalací nebo používáním aplikace s nimi souhlasíš.
 
@@ -20,6 +20,10 @@ této licence ji smíš používat, zkoumat, upravovat a šířit.
 Aplikace obsahuje i programy a knihovny třetích stran (například FFmpeg, mpv, Qt, PyTorch a běhové knihovny
 NVIDIA a Intel). Každá má vlastní licenci, seznam je v souboru `THIRD_PARTY_LICENSES.md`; knihovny NVIDIA,
 Intel a Microsoft jsou proprietární a pod GPL nespadají. Název kupcake.studio a logo nejsou součástí licence kódu.
+
+Knihovny NVIDIA (CUDA, cuDNN) poskytuje společnost NVIDIA za podmínek vlastních licenčních smluv; jejich plná
+znění jsou ve složce `licenses`. Tyto knihovny smíš používat jen spolu s touto aplikací. Nesmíš je šířit
+samostatně, upravovat ani zpětně analyzovat.
 
 ## 3. Bez záruky
 

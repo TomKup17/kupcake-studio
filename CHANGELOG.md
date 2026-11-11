@@ -1,6 +1,6 @@
 # Změny
 
-## Neuvydáno – změny po 1.0.0-beta.1
+## 1.0.0-beta.2 – 2026-11-12
 
 ### Licence a dokumentace
 - `THIRD_PARTY_LICENSES.md` přepsán podle skutečného obsahu instalátoru: přesné verze všech součástí, opravené
@@ -28,6 +28,7 @@
 - V aplikaci: O aplikaci → Podmínky použití a odkaz v úvodním okně. Úvodní okno nově říká i to, že aplikace
   jednou denně zjišťuje novou verzi na GitHubu a že to jde vypnout v Nastavení.
 - Instalátor má stránku s podmínkami použití (`installer\PODMINKY.txt`, dělá ho `nastroje\podminky_txt.py`).
+- Podmínky uvádějí, že knihovny NVIDIA se používají jen spolu s aplikací a za podmínek licencí NVIDIA.
 
 ### Přesné časování
 - Vícejazyčný model MMS (licence CC BY-NC 4.0, jen nekomerční použití) je ve výchozím stavu **vypnutý**. Zapnout

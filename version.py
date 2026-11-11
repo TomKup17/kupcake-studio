@@ -2,8 +2,8 @@
 # SPDX-License-Identifier: GPL-3.0-only
 # Jediné místo s číslem verze (a datem sestavení) aplikace kupcake.studio – propisuje se do aplikace (O aplikaci), do KupcakeStudio.exe
 # (Vlastnosti → Podrobnosti) i do názvu instalátoru. Mění ho build.bat, ručně ho upravovat netřeba.
-VERZE = "1.0.0-beta.1"
-DATUM = "2026-11-03"  # datum sestavení – build.bat ho zapíše spolu s verzí
+VERZE = "1.0.0-beta.2"
+DATUM = "2026-11-12"  # datum sestavení – build.bat ho zapíše spolu s verzí
 
 if __name__ == "__main__":
     # build.bat:  python version.py          -> vypíše verzi
