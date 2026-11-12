@@ -1,5 +1,10 @@
 # Změny
 
+## Neuvydáno – změny po 1.0.0-beta.2
+
+- Soubor `LICENSE` je znovu nezměněný text GNU GPL v3, aby GitHub licenci repozitáře rozpoznal. Copyright
+  a označení `GPL-3.0-only` zůstávají v README, v `ADDITIONAL_PERMISSION.md` a v hlavičkách zdrojových souborů.
+
 ## 1.0.0-beta.2 – 2026-11-12
 
 ### Licence a dokumentace

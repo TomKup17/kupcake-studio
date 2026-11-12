@@ -40,8 +40,15 @@ class TestLicenceKodu(unittest.TestCase):
                 self.assertIn("SPDX-License-Identifier: GPL-3.0-only", zacatek)
 
     def test_license(self):
+        """LICENSE je nezměněný text GNU GPL v3 – bez vlastních řádků navíc, jinak GitHub licenci repozitáře
+        nerozpozná. Copyright a označení GPL-3.0-only jsou v README, ADDITIONAL_PERMISSION.md a v hlavičkách."""
         text = cti("LICENSE")
-        self.assertTrue(text.startswith("Copyright (C) 2026 Tomáš Kupec\nSPDX-License-Identifier: GPL-3.0-only\n"))
+        self.assertTrue(text.lstrip().startswith("GNU GENERAL PUBLIC LICENSE\n"))
+        self.assertNotIn("SPDX-License-Identifier", text)
+        self.assertNotIn("Tomáš Kupec", text)
+        for soubor in ("README.md", "ADDITIONAL_PERMISSION.md"):
+            self.assertIn("Copyright (C) 2026 Tomáš Kupec", cti(soubor))
+            self.assertIn("GPL-3.0-only", cti(soubor))
         self.assertIn("GNU GENERAL PUBLIC LICENSE", text)
         self.assertIn("Version 3, 29 June 2007", text)
         self.assertIn("END OF TERMS AND CONDITIONS", text)
