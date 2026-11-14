@@ -7,7 +7,8 @@ Aplikace značky iamtom.kup. Zobrazovaný název se píše vždy `kupcake.studio
 
 > **Název a logo:** název **kupcake.studio**, logo a ikona s cupcakem a značka iamtom.kup **nejsou
 > součástí licence kódu** – nesmí se používat pro upravené verze ani jiné projekty bez souhlasu autora.
-> **Oficiální verze je ke stažení jen z tohoto repozitáře** (Releases); instalátory z jiných zdrojů
+> **Oficiální verze je ke stažení jen z webu autora [tomkup.cz](https://tomkup.cz) a z tohoto
+> repozitáře** (Releases); instalátory z jiných zdrojů
 > mohou být upravené. Bezpečnostní problém nahlas podle [SECURITY.md](SECURITY.md).
 
 Automatické titulky z videa: přepis řeči (faster-whisper large-v3 na GPU), editor titulků
@@ -90,7 +91,8 @@ Orientační rychlost přepisu (60 s souvislé řeči): RTX 4070 SUPER asi 5 s, 
 
 ## Instalace
 
-**Doporučeno – jeden soubor:** z **Releases** tohoto repozitáře (jinde se oficiální verze nešíří) stáhni
+**Doporučeno – jeden soubor:** z webu autora **[tomkup.cz](https://tomkup.cz)** nebo z **Releases** tohoto
+repozitáře (jinde se oficiální verze nešíří) stáhni
 **`KupcakeStudio-Setup.exe`** (asi 2 MB) a spusť ho. Na stránce s volbami zaškrtneš AI modely, které se mají
 stáhnout hned (model pro přepis 2,9 GB, přesné časování asi 1,2 GB na jazyk, oddělení hlasu 80 MB). Instalátor
 pak ze stejného vydání stáhne části plného instalátoru (asi 3,1 GB), ověří jejich SHA-256, nainstaluje jimi

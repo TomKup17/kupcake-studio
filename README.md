@@ -7,8 +7,8 @@ An app by iamtom.kup. The display name is always written `kupcake.studio`; the t
 
 > **Name and logo:** the name **kupcake.studio**, the cupcake logo and icon and the iamtom.kup brand
 > **are not covered by the code licence** – they must not be used for modified versions or other projects
-> without the author's consent. **The official version is only available from this repository** (Releases);
-> installers from other sources may have been modified. Report security issues as described in
+> without the author's consent. **The official version is only available from the author's website
+> [tomkup.cz](https://tomkup.cz) and from this repository** (Releases); installers from other sources may have been modified. Report security issues as described in
 > [SECURITY.md](SECURITY.md).
 
 Automatic subtitles from video: speech transcription (faster-whisper large-v3 on the GPU), a subtitle editor
@@ -96,8 +96,8 @@ Approximate transcription speed (60 s of continuous speech): RTX 4070 SUPER abou
 
 ## Installation
 
-**Recommended – one file:** from this repository's **Releases** (the official version isn't distributed
-anywhere else), download **`KupcakeStudio-Setup.exe`** (about 2 MB) and run it. On its options page you can
+**Recommended – one file:** from the author's website **[tomkup.cz](https://tomkup.cz)** or from this
+repository's **Releases** (the official version isn't distributed anywhere else), download **`KupcakeStudio-Setup.exe`** (about 2 MB) and run it. On its options page you can
 tick the AI models to download right away (speech model 2.9 GB, precise timing about 1.2 GB per language,
 voice separation 80 MB). It then downloads the full installer parts below from the same release (about
 3.1 GB), checks their SHA-256, installs the app with them and downloads the ticked models, each checked

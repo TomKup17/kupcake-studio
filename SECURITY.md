@@ -20,8 +20,8 @@ Prosím netestuj problém na cizích počítačích ani datech a nestahuj nic, k
 
 ## Podporované verze
 
-Opravy dostává jen **poslední vydaná verze**. Oficiální instalátor je ke stažení jen z tohoto repozitáře
-(Releases) – verze z jiných zdrojů mohou být upravené.
+Opravy dostává jen **poslední vydaná verze**. Oficiální instalátor je ke stažení jen z webu autora
+**https://tomkup.cz** a z tohoto repozitáře (Releases) – verze z jiných zdrojů mohou být upravené.
 
 ## Co aplikace dělá pro bezpečnost
 
