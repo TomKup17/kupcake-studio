@@ -72,9 +72,15 @@ del /q "dist\KupcakeStudio-Setup-%VERZE%-*.bin" 2>nul
 "%ISCC%" /Qp /DAppVersion=%VERZE% /DAppVersionNum=%VERZE_CISLO% "installer\KupcakeStudio.iss" || goto :chyba
 rem kontrolní součty SHA-256 instalátoru i všech jeho částí .bin v jednom souboru (ke zveřejnění u vydání)
 powershell -NoProfile -Command "Get-ChildItem 'dist\KupcakeStudio-Setup-%VERZE%.exe','dist\KupcakeStudio-Setup-%VERZE%-*.bin' | Sort-Object Name | ForEach-Object { (Get-FileHash $_.FullName -Algorithm SHA256).Hash.ToLower() + '  ' + $_.Name } | Out-File -Encoding ascii 'dist\KupcakeStudio-Setup-%VERZE%.sha256'" || goto :chyba
+rem malý stahovací instalátor KupcakeStudio-Setup.exe: stáhne části výše z GitHub Releases (tag v%VERZE%)
+rem a volitelně AI modely – seznam částí a modelů s SHA-256 připraví nastroje\web_instalator.py
+echo.
+echo Stahovací instalátor – dist\KupcakeStudio-Setup.exe
+"%PY%" nastroje\web_instalator.py %VERZE% || goto :chyba
+"%ISCC%" /Qp /DAppVersion=%VERZE% /DAppVersionNum=%VERZE_CISLO% "installer\KupcakeStudio-Web.iss" || goto :chyba
 echo.
 echo Hotovo – na GitHub Releases nahraj všechny tyto soubory:
-dir /b "dist\KupcakeStudio-Setup-%VERZE%.exe" "dist\KupcakeStudio-Setup-%VERZE%-*.bin" "dist\KupcakeStudio-Setup-%VERZE%.sha256"
+dir /b "dist\KupcakeStudio-Setup.exe" "dist\KupcakeStudio-Setup-%VERZE%.exe" "dist\KupcakeStudio-Setup-%VERZE%-*.bin" "dist\KupcakeStudio-Setup-%VERZE%.sha256"
 echo.
 type "dist\KupcakeStudio-Setup-%VERZE%.sha256"
 goto :konec

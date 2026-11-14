@@ -20,8 +20,10 @@
 #ifndef AppVersionNum
   #define AppVersionNum AppVersion
 #endif
-; názvy a AppId jdou pro test instalátoru přepsat (/DTechName=… /DAppIdGuid=… /DZdroj=…), jinak tyto:
-#define AppName "kupcake.studio"
+; názvy a AppId jdou pro test instalátoru přepsat (/DAppName=… /DTechName=… /DAppIdGuid=… /DZdroj=…), jinak tyto:
+#ifndef AppName
+  #define AppName "kupcake.studio"
+#endif
 #ifndef TechName
   #define TechName "KupcakeStudio"
 #endif

@@ -51,6 +51,7 @@ that the app never talks to the internet, though – it connects in exactly thes
 |---|---|---|---|
 | **Checking for a new version** – 5 s after start, at most once every 24 h | `api.github.com` (GitHub, Microsoft) | a normal HTTPS request for the list of releases; header `User-Agent: kupcake.studio/<version>`. Like any server, GitHub sees your IP address. Nothing else. | Settings → **Check for new versions** |
 | **Downloading a model** – only after your consent in a dialog (name, size, source), the first time a given transcription accuracy, timing language or voice separation is used | `huggingface.co` (+ its CDN `*.hf.co`, `*.huggingface.co`); Demucs from `dl.fbaipublicfiles.com` (Meta) | an HTTPS request for the specific model files + `User-Agent` as above. The server sees your IP address and **which model** you download (so e.g. that you are timing a Czech video). No video, audio or text. | don't give consent (transcription then won't run, or runs without that step) |
+| **Installing with the small installer** `KupcakeStudio-Setup.exe` (not the app itself) – only while it runs | `github.com` (the installer parts of the same release); the AI models you tick on its options page from `huggingface.co` / `dl.fbaipublicfiles.com` | HTTPS requests for those files; the servers see your IP address and which files you download. Each file is checked against its SHA-256. | use the full installer (`.exe` + `.bin` parts), or untick the models – the app then asks before downloading them |
 | **Links** – Help → Report a bug, buttons in About, "Download" for a new version | **your browser** opens the page from `links.py`, or the release page on `github.com` | nothing – a page just opens; the app itself **never downloads or runs an installer** | click only when you want to |
 
 What the app also does so that nothing "leaks" on its own:
@@ -88,14 +89,24 @@ runs – that's a Windows feature, not the app.
 | Memory | 8 GB RAM | 16 GB RAM |
 | Graphics card | – (transcription and export run on the CPU, much slower) | NVIDIA with 6 GB VRAM or more, current driver (CUDA 12) |
 | Disk space | app about 7 GB + model 1.5–3 GB | 15 GB free (more models, exports) |
-| Internet | for the first transcription (model download) | – |
+| Internet | for installing with the small installer and for the first transcription (model download) | – |
 
 Approximate transcription speed (60 s of continuous speech): RTX 4070 SUPER about 5 s, i7-12700KF CPU about
 50 s (Most accurate), with Fast accuracy about 1.5 s / 20 s.
 
 ## Installation
 
-1. From this repository's **Releases** (the official version isn't distributed anywhere else), download
+**Recommended – one file:** from this repository's **Releases** (the official version isn't distributed
+anywhere else), download **`KupcakeStudio-Setup.exe`** (about 2 MB) and run it. On its options page you can
+tick the AI models to download right away (speech model 2.9 GB, precise timing about 1.2 GB per language,
+voice separation 80 MB). It then downloads the full installer parts below from the same release (about
+3.1 GB), checks their SHA-256, installs the app with them and downloads the ticked models, each checked
+against its SHA-256. It needs an internet connection the whole time and installs without administrator
+rights. Models you don't tick are downloaded by the app later, after asking you.
+
+**Full installer – without internet during installation:**
+
+1. From this repository's **Releases**, download
    **all** installer files into one folder: `KupcakeStudio-Setup-<version>.exe` and its parts
    `KupcakeStudio-Setup-<version>-1.bin`, `-2.bin`… GitHub only allows files up to 2 GB, so the installer
    is split; it won't run without the `.bin` parts. Size: about **3.1 GB** in total, about **6.9 GB** after
@@ -244,14 +255,18 @@ is written with the help of an AI assistant (Claude Code).
    (e.g. `1.0.1` – fixes, `1.1.0` – new features). Enter keeps the current one.
    Without asking: `build.bat 1.0.1`.
 3. Wait about 10 minutes. The result in the `dist` folder: **`KupcakeStudio-Setup-X.Y.Z.exe`**, the parts
-   `KupcakeStudio-Setup-X.Y.Z-1.bin`, `-2.bin` (each under 2 GB) and `KupcakeStudio-Setup-X.Y.Z.sha256`
-   with the checksums of all files. `build.bat` lists them at the end.
+   `KupcakeStudio-Setup-X.Y.Z-1.bin`, `-2.bin` (each under 2 GB), `KupcakeStudio-Setup-X.Y.Z.sha256`
+   with the checksums of all files, and the small installer **`KupcakeStudio-Setup.exe`**
+   (`installer\KupcakeStudio-Web.iss`, data from `nastroje\web_instalator.py`). It downloads the parts from
+   the release with tag `vX.Y.Z` and checks them against the checksums of this very build – so it only works
+   with the files from the same `build.bat` run. `build.bat` lists all five at the end.
 4. Run the installer – it installs over the old version (also over Spellcast and tkStudio). Settings and the
    model stay.
 5. Add what's new to `CHANGELOG.md`.
 6. Push the changes to GitHub: `git add -A`, `git commit -m "Version X.Y.Z"`, `git push`.
 7. On GitHub: **Releases → Draft a new release**, tag **`vX.Y.Z`** (the update check uses it to recognise
-   a new version), description from `CHANGELOG.md`, and attach **all** files from step 3. Mark beta versions
+   a new version), description from `CHANGELOG.md`, and attach **all** files from step 3 (all five,
+   including `KupcakeStudio-Setup.exe`). Mark beta versions
    (`1.0.0-beta.2`) as **Set as a pre-release** – they are offered only to beta users, stable versions
    won't get them.
 

@@ -4,6 +4,13 @@
 
 - Soubor `LICENSE` je znovu nezměněný text GNU GPL v3, aby GitHub licenci repozitáře rozpoznal. Copyright
   a označení `GPL-3.0-only` zůstávají v README, v `ADDITIONAL_PERMISSION.md` a v hlavičkách zdrojových souborů.
+- Nový malý instalátor `KupcakeStudio-Setup.exe` (asi 2 MB, `installer\KupcakeStudio-Web.iss`). Ukáže podmínky
+  použití a volby, stáhne z GitHub Releases části plného instalátoru téže verze, ověří jejich SHA-256 a spustí
+  plný instalátor bez průvodce s vybranými volbami. Zaškrtnuté AI modely (Whisper large-v3, přesné časování
+  pro zvolený jazyk – předvybraný podle jazyka Windows, Demucs) stáhne rovnou do složky modelů aplikace a každý
+  soubor ověří proti SHA-256 z `manifest_modelu.py`; aplikace je pak jen jednou ověří a na stažení se neptá.
+  Plný instalátor (`.exe` + části `.bin`) zůstává pro instalaci bez internetu. Data pro něj připraví
+  `nastroje\web_instalator.py`; `build.bat` ho sestaví po plném instalátoru, k vydání se tak nahrává pět souborů.
 
 ## 1.0.0-beta.2 – 2026-11-12
 

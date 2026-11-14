@@ -48,6 +48,7 @@ Nemůžeme ale tvrdit, že aplikace nikdy nekomunikuje s internetem – připoj�
 |---|---|---|---|
 | **Kontrola nové verze** – 5 s po startu, nejvýš jednou za 24 h (ve zveřejněné verzi; dokud není v `links.py` vyplněný repozitář, kontrola neběží) | `api.github.com` (GitHub, Microsoft) | běžný HTTPS požadavek na seznam vydání; hlavička `User-Agent: kupcake.studio/<verze>`. GitHub jako každý server vidí tvoji IP adresu. Nic jiného. | Nastavení → **Kontrolovat nové verze** |
 | **Stažení modelu** – jen po tvém souhlasu v dialogu (název, velikost, zdroj) při prvním použití dané přesnosti přepisu, jazyka časování nebo oddělení hlasu | `huggingface.co` (+ jeho CDN `*.hf.co`, `*.huggingface.co`); Demucs z `dl.fbaipublicfiles.com` (Meta) | HTTPS požadavek na konkrétní soubory modelu + `User-Agent` jako výše. Server vidí IP adresu a **který model** stahuješ (tedy např. že časuješ české video). Žádné video, zvuk ani text. | nedávat souhlas (přepis pak nejde, resp. proběhne bez daného kroku) |
+| **Instalace malým instalátorem** `KupcakeStudio-Setup.exe` (ne aplikace sama) – jen během instalace | `github.com` (části instalátoru téhož vydání); AI modely zaškrtnuté na stránce s volbami z `huggingface.co` / `dl.fbaipublicfiles.com` | HTTPS požadavky na tyto soubory; servery vidí IP adresu a které soubory stahuješ. Každý soubor se ověří proti SHA-256. | použít plný instalátor (`.exe` + části `.bin`), nebo modely nezaškrtnout – aplikace se pak před stažením zeptá |
 | **Odkazy** – Nápověda → Nahlásit chybu, tlačítka v O aplikaci, „Stáhnout“ u nové verze | otevře se **tvůj prohlížeč** na stránce z `links.py`, resp. na stránce vydání na `github.com` | nic – jen se otevře stránka; aplikace sama **nikdy nestahuje ani nespouští instalátor** | kliknout jen, když chceš |
 
 Co aplikace dělá navíc, aby nic „neuteklo“ samo:
@@ -82,14 +83,23 @@ to je funkce Windows, ne aplikace.
 | Paměť | 8 GB RAM | 16 GB RAM |
 | Grafická karta | – (přepis i export poběží na procesoru, výrazně pomaleji) | NVIDIA s 6 GB VRAM a víc, aktuální ovladač (CUDA 12) |
 | Místo na disku | aplikace asi 7 GB + model 1,5–3 GB | 15 GB volného místa (víc modelů, exporty) |
-| Internet | při prvním přepisu (stažení modelu) | – |
+| Internet | při instalaci malým instalátorem a při prvním přepisu (stažení modelu) | – |
 
 Orientační rychlost přepisu (60 s souvislé řeči): RTX 4070 SUPER asi 5 s, procesor i7-12700KF asi 50 s
 (přesnost Nejpřesnější), s přesností Rychlá asi 1,5 s / 20 s.
 
 ## Instalace
 
-1. Z **Releases** tohoto repozitáře (jinde se oficiální verze nešíří) stáhni **všechny** soubory instalátoru
+**Doporučeno – jeden soubor:** z **Releases** tohoto repozitáře (jinde se oficiální verze nešíří) stáhni
+**`KupcakeStudio-Setup.exe`** (asi 2 MB) a spusť ho. Na stránce s volbami zaškrtneš AI modely, které se mají
+stáhnout hned (model pro přepis 2,9 GB, přesné časování asi 1,2 GB na jazyk, oddělení hlasu 80 MB). Instalátor
+pak ze stejného vydání stáhne části plného instalátoru (asi 3,1 GB), ověří jejich SHA-256, nainstaluje jimi
+aplikaci a stáhne zaškrtnuté modely, každý ověřený proti SHA-256. Celou dobu potřebuje internet, instaluje se
+bez práv správce. Nezaškrtnuté modely stáhne až aplikace, po tvém souhlasu.
+
+**Plný instalátor – bez internetu během instalace:**
+
+1. Z **Releases** tohoto repozitáře stáhni **všechny** soubory instalátoru
    do jedné složky: `KupcakeStudio-Setup-<verze>.exe` a k němu části `KupcakeStudio-Setup-<verze>-1.bin`,
    `-2.bin`… GitHub dovolí soubory nejvýš do 2 GB, proto je instalátor rozdělený; bez částí `.bin` se
    nespustí. Velikost: dohromady asi **3,1 GB**, po instalaci asi **6,9 GB** (obsahuje PyTorch s CUDA, FFmpeg
@@ -232,13 +242,17 @@ s pomocí AI asistenta (Claude Code).
    (např. `1.0.1` – opravy, `1.1.0` – nové funkce). Enter ponechá současnou.
    Bez ptaní: `build.bat 1.0.1`.
 3. Počkej asi 10 minut. Výsledek ve složce `dist`: **`KupcakeStudio-Setup-X.Y.Z.exe`**, části
-   `KupcakeStudio-Setup-X.Y.Z-1.bin`, `-2.bin` (každá pod 2 GB) a `KupcakeStudio-Setup-X.Y.Z.sha256`
-   s kontrolními součty všech souborů. `build.bat` je na konci vypíše.
+   `KupcakeStudio-Setup-X.Y.Z-1.bin`, `-2.bin` (každá pod 2 GB), `KupcakeStudio-Setup-X.Y.Z.sha256`
+   s kontrolními součty všech souborů a malý instalátor **`KupcakeStudio-Setup.exe`**
+   (`installer\KupcakeStudio-Web.iss`, data z `nastroje\web_instalator.py`). Ten stahuje části z vydání
+   s tagem `vX.Y.Z` a ověřuje je kontrolními součty právě tohoto sestavení – funguje tedy jen se soubory
+   ze stejného běhu `build.bat`. `build.bat` na konci vypíše všech pět.
 4. Instalátor spusť – nainstaluje se přes starou verzi (i přes Spellcast a tkStudio). Nastavení a model zůstanou.
 5. Do `CHANGELOG.md` dopiš, co je v nové verzi.
 6. Změny nahraj na GitHub: `git add -A`, `git commit -m "Verze X.Y.Z"`, `git push`.
 7. Na GitHubu: **Releases → Draft a new release**, tag **`vX.Y.Z`** (podle něj kontrola aktualizací pozná
-   novou verzi), popis z `CHANGELOG.md` a do přílohy přetáhni **všechny** soubory z bodu 3. Beta verze
+   novou verzi), popis z `CHANGELOG.md` a do přílohy přetáhni **všechny** soubory z bodu 3 (všech pět,
+   i `KupcakeStudio-Setup.exe`). Beta verze
    (`1.0.0-beta.2`) označ **Set as a pre-release** – nabídnou se jen uživatelům bety, stabilní verze
    je nedostanou.
 
