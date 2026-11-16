@@ -11,6 +11,22 @@
   soubor ověří proti SHA-256 z `manifest_modelu.py`; aplikace je pak jen jednou ověří a na stažení se neptá.
   Plný instalátor (`.exe` + části `.bin`) zůstává pro instalaci bez internetu. Data pro něj připraví
   `nastroje\web_instalator.py`; `build.bat` ho sestaví po plném instalátoru, k vydání se tak nahrává pět souborů.
+- Sekce Nastavení je místo formuláře z dlaždic (nový modul `dlazdice.py`). Každá hodnota stylu má dlaždici,
+  která ukazuje, co upravuje, a dlaždice se samy skládají do sloupců podle šířky sekce:
+  - čísla (velikost, obrys, rozmazání a posun stínu, průhlednost a odsazení pozadí, počet slov a znaků, posun
+    a předstih) mají velké číslo s jednotkou a tlačítka − a +; kliknutím na číslo jde hodnota zapsat a po
+    kliknutí na dlaždici ji mění i kolečko myši a šipky (bez kliknutí kolečko dál jen posouvá panel),
+  - přepínače (tučné, velká písmena, stín, pozadí, zvýraznění slova) se zapínají jedním kliknutím a ukazují
+    ukázku ve zvoleném písmu a barvách; zapnutá dlaždice je modrá,
+  - barvy jsou barevné vzorky – kliknutí otevře malou paletu deseti častých barev a „Vlastní barva…“
+    s dosavadním plným výběrem,
+  - písmo ukazuje „Aa“ ve zvoleném písmu; kliknutí otevře seznam písem s hledáním,
+  - pozice má malou obrazovku ve tvaru videa, na které jde titulek táhnout myší.
+
+  Dlaždice barvy, rozmazání a posunu stínu se s vypnutým stínem schovají (stejně jako dosud u pozadí
+  a zvýraznění). Vysvětlivky ze spodku skupin Pozice a Časování jsou v nápovědě po najetí myší na dlaždici.
+  Kratší popisky: „Stín“, „Pozadí“, „Zvýraznit slovo“, „Slov najednou“. Presety, oranžová tečka u skupiny,
+  ukládání stylu ani projekty se nemění; nastavit jdou všechny hodnoty jako dřív. Testy: `tests\test_dlazdice.py`.
 
 ## 1.0.0-beta.2 – 2026-11-12
 

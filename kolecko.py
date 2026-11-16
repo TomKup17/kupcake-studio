@@ -2,16 +2,17 @@
 # SPDX-License-Identifier: GPL-3.0-only
 """Kolečko myši nemění hodnoty polí jen tím, že nad nimi kurzor projíždí.
 
-Číselná pole, rozbalovací seznamy a posuvníky reagují na kolečko, až když do nich uživatel klikne
-(mají fokus – vidět podle modrého obrysu). Jinak se kolečko předá nejbližšímu posouvatelnému
-panelu, takže se panel Nastavení posouvá, jako by tam pole nebylo. Klik mimo pole nebo Esc fokus zruší.
+Číselná pole, číselné dlaždice v Nastavení, rozbalovací seznamy a posuvníky reagují na kolečko, až když
+do nich uživatel klikne (mají fokus – vidět podle modrého obrysu). Jinak se kolečko předá nejbližšímu
+posouvatelnému panelu, takže se panel Nastavení posouvá, jako by tam pole nebylo. Klik mimo pole nebo Esc
+fokus zruší.
 Platí plošně pro všechny takové prvky, i budoucí – filtr je nainstalovaný na celou aplikaci.
 """
 from PySide6.QtCore import QEvent, QObject, Qt
 from PySide6.QtWidgets import QAbstractScrollArea, QAbstractSpinBox, QApplication, QComboBox, QSlider
 
-# QSlider, ne QAbstractSlider – posuvníky panelů (QScrollBar) ne
-_TYPY = tuple(typ.__name__ for typ in (QAbstractSpinBox, QComboBox, QSlider))
+# QSlider, ne QAbstractSlider – posuvníky panelů (QScrollBar) ne; DlazdiceHodnota = číselné dlaždice Nastavení
+_TYPY = tuple(typ.__name__ for typ in (QAbstractSpinBox, QComboBox, QSlider)) + ("DlazdiceHodnota",)
 
 
 def _je_pole(obj):

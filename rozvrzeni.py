@@ -1,11 +1,13 @@
 # kupcake.studio – Copyright (C) 2026 Tomáš Kupec
 # SPDX-License-Identifier: GPL-3.0-only
-"""Sbalitelné skupiny v sekci Nastavení. (Rozvržení sekcí samotných řeší doky.py.)"""
+"""Sbalitelné skupiny v sekci Nastavení – v každé je mřížka dlaždic (dlazdice.py). (Rozvržení sekcí
+samotných řeší doky.py.)"""
 from PySide6.QtCore import Qt, Signal
 from PySide6.QtGui import QColor, QPainter
-from PySide6.QtWidgets import QFormLayout, QHBoxLayout, QPushButton, QSizePolicy, QToolButton, QVBoxLayout, QWidget
+from PySide6.QtWidgets import QHBoxLayout, QPushButton, QSizePolicy, QToolButton, QVBoxLayout, QWidget
 
 import theme
+from dlazdice import MrizkaDlazdic
 
 
 def obnov_stridani(rozlozeni):
@@ -20,7 +22,7 @@ def obnov_stridani(rozlozeni):
 
 
 class Skupina(QWidget):
-    """Sbalitelná skupina nastavení: klikací nadpis se šipkou a pod ním formulář. V nadpisu vpravo může
+    """Sbalitelná skupina nastavení: klikací nadpis se šipkou a pod ním mřížka dlaždic. V nadpisu vpravo může
     svítit malá oranžová tečka – hodnoty skupiny se liší od presetu; klik na ni vyšle vratit.
     Celá skupina (hlavička i obsah) má vlastní pozadí – střídá se A/B podle pořadí (obnov_stridani);
     rozbalená má vlevo oranžový proužek přes celou výšku."""
@@ -57,11 +59,8 @@ class Skupina(QWidget):
         self.tecka.hide()
         uvnitr.addWidget(self.tecka)
         self.telo = QWidget()
-        self.form = QFormLayout(self.telo)
-        self.form.setContentsMargins(10, 10, 8, 14)  # vlevo místo pro proužek, vpravo pro okraj pozadí
-        self.form.setLabelAlignment(Qt.AlignRight | Qt.AlignVCenter)
-        self.form.setHorizontalSpacing(10)
-        self.form.setVerticalSpacing(8)
+        self.mrizka = MrizkaDlazdic(self.telo)
+        self.mrizka.setContentsMargins(10, 8, 8, 10)  # vlevo místo pro proužek, vpravo pro okraj pozadí
         lay.addWidget(self.telo)
         self._popisek()
 

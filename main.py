@@ -9,13 +9,12 @@ from copy import deepcopy
 from dataclasses import replace
 from pathlib import Path
 
-from PySide6.QtCore import QByteArray, QEvent, QLocale, QObject, QRectF, QSettings, Qt, QThread, QTimer, Signal
+from PySide6.QtCore import QByteArray, QEvent, QObject, QRectF, QSettings, Qt, QThread, QTimer, Signal
 from PySide6.QtGui import QAction, QColor, QFontDatabase, QIcon, QImage, QKeySequence, QPainter, QPixmap
 from PySide6.QtWidgets import (
-    QAbstractItemView, QApplication, QCheckBox, QColorDialog, QComboBox, QDialog, QDialogButtonBox,
-    QDoubleSpinBox, QFileDialog, QHBoxLayout, QHeaderView, QInputDialog, QLabel, QLineEdit,
-    QMainWindow, QMenu, QMessageBox, QProgressBar, QPushButton, QScrollArea, QSizePolicy, QSlider, QSpinBox,
-    QStackedWidget, QTableWidget, QTableWidgetItem, QToolButton, QVBoxLayout, QWidget,
+    QAbstractItemView, QApplication, QComboBox, QDialog, QDialogButtonBox, QFileDialog, QHBoxLayout,
+    QHeaderView, QInputDialog, QLabel, QLineEdit, QMainWindow, QMenu, QMessageBox, QProgressBar, QPushButton,
+    QScrollArea, QSizePolicy, QStackedWidget, QTableWidget, QTableWidgetItem, QToolButton, QVBoxLayout, QWidget,
 )
 
 import cesty
@@ -364,50 +363,33 @@ class CasPole(QWidget):
         return False
 
 
-class BarvaTlacitko(QPushButton):
-    zmena = Signal(str)
-
-    def __init__(self, titulek):
-        super().__init__()
-        self.setObjectName("barva")
-        self.setCursor(Qt.PointingHandCursor)
-        self.titulek = titulek
-        self.hex = "FFFFFF"
-        self.clicked.connect(self._vyber)
-
-    def nastav(self, hex_):
-        self.hex = hex_.upper()
-        # selektor jen na tlačítko samotné – bez něj by barvu zdědily i dialogy a další potomci
-        self.setStyleSheet(f"QPushButton#barva {{ background: #{self.hex}; }}")
-        self.setToolTip(f"#{self.hex}")
-
-    def _vyber(self):
-        c = QColorDialog.getColor(QColor(f"#{self.hex}"), self.window(), t(self.titulek))
-        if c.isValid():
-            self.nastav(c.name()[1:])
-            self.zmena.emit(self.hex)
-
-
 class PanelStylu(QScrollArea):
-    """Ovládací prvky stylu. Vysílá zmena(klic, hodnota) – styl samotný mění okno. Nahoře výběr presetu
-    a „Uložit preset“ (hlavní akce sekce – oranžová)."""
+    """Styl titulků z dlaždic (dlazdice.py): každá hodnota má dlaždici, která ukazuje, co upravuje. Vysílá
+    zmena(klic, hodnota) – styl samotný mění okno; panel si drží jen jeho kopii pro ukázky na dlaždicích.
+    Nahoře výběr presetu a „Uložit preset“ (hlavní akce sekce – oranžová)."""
     zmena = Signal(str, object)
     preset_vybran = Signal(str)
     ulozit_preset = Signal()
     smazat_preset = Signal()
+    # dlaždice, které mají smysl jen se zapnutým přepínačem – s vypnutým se schovají
+    ZAVISLE = {"stin": ("barva_stinu", "stin_rozmazani", "stin_x", "stin_y"),
+               "pozadi": ("barva_pozadi", "pruhlednost_pozadi", "odsazeni_pozadi"),
+               "zvyrazneni": ("barva_zvyrazneni",)}
 
     def __init__(self):
         super().__init__()
+        import dlazdice as dl
         self.setWidgetResizable(True)
         self.setHorizontalScrollBarPolicy(Qt.ScrollBarAlwaysOff)
-        self.setMinimumWidth(300)
         self.viewport().setAutoFillBackground(False)  # průhledné – pod ním je karta
         obsah = QWidget()
         lay = QVBoxLayout(obsah)
         lay.setContentsMargins(0, 0, 0, 0)  # kategorie s vlastním pozadím přes celou šířku
         lay.setSpacing(4)
-        self.prvky = {}
+        self.prvky = {}      # klíč stylu → dlaždice
         self.skupiny = {}
+        self.styl = Styl()   # kopie zobrazeného stylu – podle ní dlaždice kreslí ukázky
+        self.pomer = 9 / 16  # šířka / výška videa pro malou obrazovku na dlaždici Pozice
 
         radek = QHBoxLayout()
         radek.setContentsMargins(0, 2, 0, 8)
@@ -433,77 +415,54 @@ class PanelStylu(QScrollArea):
         radek.addWidget(self.btn_ulozit_preset)
         lay.addLayout(radek)
 
+        def cislo(klic, popisek, od, do, krok_=1, **volby):
+            self._pridej(g, klic, dl.DlazdiceCislo(self, popisek, od, do, krok_, napoveda=f"styl.tip.{klic}",
+                                                   **volby))
+
+        def barva(klic, popisek):
+            self._pridej(g, klic, dl.DlazdiceBarva(self, popisek))
+
+        def prepinac(klic, popisek, symbol, napoveda=None):
+            self._pridej(g, klic, dl.DlazdicePrepinac(self, popisek, symbol, napoveda))
+
         g = self._skupina(lay, "text")
-        font = QComboBox()
-        font.setEditable(True)
-        font.setMinimumContentsLength(12)
-        font.setSizeAdjustPolicy(QComboBox.AdjustToMinimumContentsLengthWithIcon)
-        font.setInsertPolicy(QComboBox.NoInsert)
         # písma rozhraní (Inter, JetBrains Mono) nejsou pro FFmpeg dostupná – do nabídky pro titulky nepatří
         rodiny = [f for f in QFontDatabase.families()
                   if not f.startswith(("@", "Inter", "JetBrains Mono"))]
-        font.addItems(VLASTNI_FONTY + [f for f in rodiny if f not in VLASTNI_FONTY])
-        font.currentTextChanged.connect(lambda v: self._posli("font", v.strip()) if v.strip() else None)
-        self.prvky["font"] = font
-        g.addRow(self._popisek("styl.font"), font)
-        self._cislo(g, "velikost", "styl.velikost", 2, 30, 0.5, "styl.pripona_sirky", meritko=100)
-        self._barva(g, "barva_textu", "styl.barva_textu")
-        self._zaskrt(g, "tucne", "styl.tucne")
-        self._zaskrt(g, "velka_pismena", "styl.velka_pismena")
+        self._pridej(g, "font", dl.DlazdicePismo(self, "styl.font",
+                                                 VLASTNI_FONTY + [f for f in rodiny if f not in VLASTNI_FONTY]))
+        cislo("velikost", "styl.velikost", 2, 30, 0.5, desetinna=1, meritko=100, jednotka="%")
+        barva("barva_textu", "styl.barva_textu")
+        prepinac("tucne", "styl.tucne", dl.symbol_tucne)
+        prepinac("velka_pismena", "styl.velka_pismena", dl.symbol_velka)
 
         g = self._skupina(lay, "obrys")
-        self._barva(g, "barva_obrysu", "styl.barva_obrysu")
-        self._cislo(g, "obrys", "styl.obrys", 0, 25, 0.5, "styl.pripona_pisma", meritko=100)
-        self._zaskrt(g, "stin", "styl.stin")
-        self._barva(g, "barva_stinu", "styl.barva_stinu")
-        self._cele(g, "stin_rozmazani", "styl.rozmazani", 0, 100)
-        self._cele(g, "stin_x", "styl.posun_x", -60, 60, " px")
-        self._cele(g, "stin_y", "styl.posun_y", -60, 60, " px")
+        cislo("obrys", "styl.obrys", 0, 25, 0.5, desetinna=1, meritko=100, jednotka="%", symbol=dl.symbol_obrys)
+        barva("barva_obrysu", "styl.barva_obrysu")
+        prepinac("stin", "styl.stin", dl.symbol_stin)
+        barva("barva_stinu", "styl.barva_stinu")
+        cislo("stin_rozmazani", "styl.rozmazani", 0, 100)
+        cislo("stin_x", "styl.posun_x", -60, 60, jednotka="px", znamenko=True)
+        cislo("stin_y", "styl.posun_y", -60, 60, jednotka="px", znamenko=True)
 
-        self.form_pozadi = g = self._skupina(lay, "pozadi")
-        self._zaskrt(g, "pozadi", "styl.pozadi")
-        self._barva(g, "barva_pozadi", "styl.barva_pozadi")
-        self._cele(g, "pruhlednost_pozadi", "styl.pruhlednost", 0, 100, " %")
-        self._cislo(g, "odsazeni_pozadi", "styl.odsazeni", 0, 100, 1, "styl.pripona_pisma", meritko=100)
-        self.prvky["pozadi"].toggled.connect(self._viditelnost_pozadi)
+        g = self._skupina(lay, "pozadi")
+        prepinac("pozadi", "styl.pozadi", dl.symbol_pozadi)
+        barva("barva_pozadi", "styl.barva_pozadi")
+        cislo("pruhlednost_pozadi", "styl.pruhlednost", 0, 100, jednotka="%")
+        cislo("odsazeni_pozadi", "styl.odsazeni", 0, 100, desetinna=1, meritko=100, jednotka="%")
 
         g = self._skupina(lay, "pozice")
-        pozice = QSlider(Qt.Horizontal)
-        pozice.setRange(0, 100)
-        popis = QLabel()
-        popis.setMinimumWidth(40)
-        pozice.valueChanged.connect(lambda v: popis.setText(f"{v} %"))
-        pozice.valueChanged.connect(lambda v: self._posli("pozice_y", v / 100))
-        radek = QHBoxLayout()
-        radek.addWidget(pozice, 1)
-        radek.addWidget(popis)
-        self.prvky["pozice_y"] = pozice
-        g.addRow(self._popisek("styl.pozice"), radek)
-        slova = self._cele(g, "max_slov", "styl.max_slov", 0, 12)
-        prekladej(lambda: slova.setSpecialValueText(t("styl.auto")))
-        self._cele(g, "max_znaku", "styl.max_znaku", 5, 80)
-        tip = QLabel()
-        prekladej(lambda: tip.setText(t("styl.tip_pozice")))
-        tip.setObjectName("stav")
-        tip.setWordWrap(True)
-        g.addRow(tip)
+        self._pridej(g, "pozice_y", dl.DlazdicePozice(self, "styl.pozice", napoveda="styl.tip.pozice_y"))
+        cislo("max_slov", "styl.max_slov", 0, 12, specialni=lambda: t("styl.auto"))
+        cislo("max_znaku", "styl.max_znaku", 5, 80)
 
-        self.form_zvyrazneni = g = self._skupina(lay, "efekty")
-        self._zaskrt(g, "zvyrazneni", "styl.zvyrazneni")
-        self._barva(g, "barva_zvyrazneni", "styl.barva_zvyrazneni")
-        self.prvky["zvyrazneni"].toggled.connect(
-            lambda v: self.form_zvyrazneni.setRowVisible(self.prvky["barva_zvyrazneni"], v))
+        g = self._skupina(lay, "efekty")
+        prepinac("zvyrazneni", "styl.zvyrazneni", dl.symbol_zvyrazneni, "styl.tip.zvyrazneni")
+        barva("barva_zvyrazneni", "styl.barva_zvyrazneni")
 
         g = self._skupina(lay, "casovani")
-        posun = self._cele(g, "posun_ms", "styl.posun", -2000, 2000, " ms")
-        posun.setSingleStep(10)
-        predstih = self._cele(g, "predstih_ms", "styl.predstih", 0, 200, " ms")
-        predstih.setSingleStep(5)
-        tip = QLabel()
-        prekladej(lambda: tip.setText(t("styl.tip_casovani")))
-        tip.setObjectName("stav")
-        tip.setWordWrap(True)
-        g.addRow(tip)
+        cislo("posun_ms", "styl.posun", -2000, 2000, 10, jednotka="ms", znamenko=True)
+        cislo("predstih_ms", "styl.predstih", 0, 200, 5, jednotka="ms")
 
         lay.addSpacing(8)
         self.btn_vychozi = QPushButton()
@@ -514,63 +473,38 @@ class PanelStylu(QScrollArea):
         self.setWidget(obsah)
         from rozvrzeni import obnov_stridani
         obnov_stridani(lay)  # pozadí kategorií A, B, A, B… podle pořadí
+        self._obnov_dlazdice()
+        # nejmenší šířka: dvě dlaždice vedle sebe a celý řádek presetů (tlačítko je v každém jazyce jinak široké);
+        # v širším panelu se dlaždice samy přeskládají do více sloupců
+        prekladej(lambda: self.setMinimumWidth(max(240, lay.minimumSize().width() + 12)))
 
     def _skupina(self, lay, klic):
-        """klic = stálé jméno skupiny (ukládá se stav sbalení), nadpis se překládá."""
+        """klic = stálé jméno skupiny (ukládá se stav sbalení), nadpis se překládá. Vrací mřížku dlaždic."""
         from rozvrzeni import Skupina
         skupina = Skupina("")
         prekladej(lambda: skupina.nastav_nazev(t(f"styl.skupina.{klic}")))
         self.skupiny[klic] = skupina
         lay.addWidget(skupina)
-        return skupina.form
+        return skupina.mrizka
 
-    @staticmethod
-    def _popisek(klic):
-        lbl = QLabel()
-        prekladej(lambda: lbl.setText(t(klic)))
-        return lbl
+    def _pridej(self, mrizka, klic, dlazdice):
+        dlazdice.zmena.connect(lambda hodnota, k=klic: self._posli(k, hodnota))
+        self.prvky[klic] = dlazdice
+        mrizka.addWidget(dlazdice)
 
     def _posli(self, klic, hodnota):
+        setattr(self.styl, klic, hodnota)
+        self._obnov_dlazdice()
         if not self.signalsBlocked():
             self.zmena.emit(klic, hodnota)
 
-    def _cislo(self, form, klic, popis, od, do, krok_, pripona, meritko):
-        w = QDoubleSpinBox()
-        w.setRange(od, do)
-        w.setSingleStep(krok_)
-        w.setDecimals(1)
-
-        def preloz():  # přípona i formát čísla (10,0 / 10.0) podle jazyka
-            w.setLocale(QLocale())
-            w.setSuffix(t(pripona))
-        prekladej(preloz)
-        w.valueChanged.connect(lambda v: self._posli(klic, round(v / meritko, 4)))
-        w.meritko = meritko
-        self.prvky[klic] = w
-        form.addRow(self._popisek(popis), w)
-        return w
-
-    def _cele(self, form, klic, popis, od, do, pripona=""):
-        w = QSpinBox()
-        w.setRange(od, do)
-        w.setSuffix(pripona)
-        w.valueChanged.connect(lambda v: self._posli(klic, v))
-        self.prvky[klic] = w
-        form.addRow(self._popisek(popis), w)
-        return w
-
-    def _zaskrt(self, form, klic, popis):
-        w = QCheckBox()
-        prekladej(lambda: w.setText(t(popis)))
-        w.toggled.connect(lambda v: self._posli(klic, v))
-        self.prvky[klic] = w
-        form.addRow("", w)
-
-    def _barva(self, form, klic, popis):
-        w = BarvaTlacitko(popis)
-        w.zmena.connect(lambda v: self._posli(klic, v))
-        self.prvky[klic] = w
-        form.addRow(self._popisek(popis), w)
+    def _obnov_dlazdice(self):
+        """Schová dlaždice vypnutých přepínačů a překreslí ukázky podle aktuálního stylu."""
+        for prepinac, zavisle in self.ZAVISLE.items():
+            for klic in zavisle:
+                self.prvky[klic].setVisible(bool(getattr(self.styl, prepinac)))
+        for dlazdice in self.prvky.values():
+            dlazdice.update()
 
     def nastav_presety(self, nazvy, aktualni):
         """nazvy: klíče presetů (presety.VYCHOZI = vestavěný, zobrazí se přeložený název)."""
@@ -583,30 +517,17 @@ class PanelStylu(QScrollArea):
         self.preset.blockSignals(False)
         self.btn_smazat_preset.setEnabled(aktualni != VYCHOZI)
 
-    def _viditelnost_pozadi(self, zapnuto):
-        for k in ("barva_pozadi", "pruhlednost_pozadi", "odsazeni_pozadi"):
-            self.form_pozadi.setRowVisible(self.prvky[k], zapnuto)
+    def nastav_pomer(self, sirka, vyska):
+        """Poměr stran videa – malá obrazovka na dlaždici Pozice má stejný tvar jako video."""
+        self.pomer = min(max(sirka / max(vyska, 1), 0.4), 2.4)
+        self.prvky["pozice_y"].prekresli_obrazovku()
 
     def nastav(self, styl):
         """Zobrazí hodnoty stylu bez vyslání změn."""
-        self.blockSignals(True)
-        for klic, w in self.prvky.items():
-            v = getattr(styl, klic)
-            if isinstance(w, QComboBox):
-                w.setCurrentText(v)
-            elif isinstance(w, QDoubleSpinBox):
-                w.setValue(v * w.meritko)
-            elif isinstance(w, QSlider):
-                w.setValue(round(v * 100))
-            elif isinstance(w, QSpinBox):
-                w.setValue(v)
-            elif isinstance(w, QCheckBox):
-                w.setChecked(v)
-            elif isinstance(w, BarvaTlacitko):
-                w.nastav(v)
-        self._viditelnost_pozadi(styl.pozadi)
-        self.form_zvyrazneni.setRowVisible(self.prvky["barva_zvyrazneni"], styl.zvyrazneni)
-        self.blockSignals(False)
+        self.styl = replace(styl)
+        for klic, dlazdice in self.prvky.items():
+            dlazdice.nastav_hodnotu(getattr(styl, klic))
+        self._obnov_dlazdice()
 
 
 class Okno(QMainWindow):
@@ -1653,6 +1574,7 @@ class Okno(QMainWindow):
     def _nacti_video(self, video, info, titulky=None, znacky=None):
         """Video do editoru (přehrávač, vlna, časová osa) – bez přepisu; volá ho otevri() i otevření projektu."""
         self.video, self.info = video, info
+        self.panel.nastav_pomer(info[0], info[1])
         self.zvuk, self.jazyk_prepisu, self.posun_zvuku, self.zarovnano = None, None, 0.0, False
         self.slova, self.titulky, self.upraveno = [], list(titulky or []), False
         self.historie, self.budoucnost = [], []

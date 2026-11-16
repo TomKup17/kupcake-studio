@@ -71,6 +71,26 @@ SKUPINA_POZADI_B = "#1C1F23"  # o ~5 % světlejší tmavě šedá
 SKUPINA_PROUZEK = AKCE      # svislý proužek vlevo u rozbalené kategorie
 SKUPINA_PROUZEK_SIRKA = 3
 SKUPINA_HLAVA_ROZBALENA = "#FFFFFF"  # text hlavičky rozbalené kategorie (sbalené zůstávají TEXT_2)
+# dlaždice v Nastavení (dlazdice.py): každá hodnota stylu má dlaždici, která ukazuje, co upravuje
+DLAZDICE_SIRKA = 98         # nejmenší šířka dlaždice – podle ní se počítá počet sloupců
+DLAZDICE_VYSKA = 78
+DLAZDICE_MEZERA = 6
+DLAZDICE_POZADI = POLE
+DLAZDICE_POZADI_HOVER = POLE_HOVER
+DLAZDICE_RAMECEK = POLE_RAMECEK
+DLAZDICE_RAMECEK_HOVER = "#3A3F46"
+DLAZDICE_FOKUS = AKCENT             # modrá = dlaždice s fokusem (kolečko, šipky) a zapnutý přepínač
+DLAZDICE_ZAPNUTO = (0, 180, 255, 26)  # modrý nádech zapnutého přepínače
+DLAZDICE_POPISEK = TEXT_2
+DLAZDICE_HODNOTA = TEXT
+DLAZDICE_JEDNOTKA = TEXT_2
+DLAZDICE_KROK = TEXT_2              # tlačítka − a + v klidu
+DLAZDICE_KROK_HOVER = AKCE          # pod myší oranžová (akce) – stejně jako šipky číselných polí
+DLAZDICE_PLATNO = "#4B5058"         # „kousek videa“ pod ukázkou písma: šedá, na které je vidět i černý stín
+DLAZDICE_STIN = (0, 0, 0, 110)      # jemný stín pod proužkem titulku na malé obrazovce (dlaždice Pozice)
+# časté barvy titulků v malé paletě pod dlaždicí barvy (RRGGBB)
+PALETA_TITULKU = ["FFFFFF", "F2EC3C", "FFD400", "FF6A00", "FF3B30",
+                  "FF4FA3", "39E75F", "00E5FF", "00B4FF", "000000"]
 # sekce (dokovací panely): linka pod záhlavím – sekce, ve které právě pracuju, oranžová, ostatní neutrální
 SEKCE_LINKA = RAMECEK
 SEKCE_LINKA_AKTIVNI = AKCE
@@ -301,6 +321,14 @@ QPushButton#skupinaHlava:hover { color: $TEXT; background: transparent; }
 QPushButton#skupinaHlava:checked { color: $SKUPINA_HLAVA_ROZBALENA; }
 QToolButton#zmenaTecka { background: transparent; border: none; border-radius: 8px; padding: 0; }
 QToolButton#zmenaTecka:hover { background: $AKCE_TINT; }
+/* dlaždice v Nastavení: pole pro zapsání hodnoty a vysouvací okna (paleta barev, seznam písem) */
+QLineEdit#dlazdiceEditor { background: $PANEL_TMAVY; border: 1px solid $AKCENT; border-radius: 4px; padding: 0 2px; }
+QFrame#dlazdiceVysuv { background: $PANEL; border: 1px solid $POLE_RAMECEK; }
+QListWidget#dlazdiceSeznam { background: $PANEL_TMAVY; border: 1px solid $RAMECEK; border-radius: ${RE}px;
+                             outline: none; }
+QListWidget#dlazdiceSeznam::item { padding: 0 8px; border-radius: 4px; }
+QListWidget#dlazdiceSeznam::item:hover { background: $POLE_HOVER; }
+QListWidget#dlazdiceSeznam::item:selected { background: #0B2533; color: $TEXT; }
 
 /* menu */
 QMenuBar { background: $POZADI; padding: 2px 8px; color: $TEXT_2; }

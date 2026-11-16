@@ -178,8 +178,9 @@ codecs may be subject to patent licences in some countries.
   (Ctrl+Shift+A),
 - subtitle editor, word-level timeline (groups, cuts, ripple delete, loop, markers, J/K/L…;
   **F1** shows all shortcuts),
-- style panel with live preview in the player and named presets (`presety.py`, `presety.json`
-  in the settings folder); a dot next to a group shows that it differs from the preset,
+- style panel made of tiles (`dlazdice.py` – each one shows what it changes) with live preview in the
+  player and named presets (`presety.py`, `presety.json` in the settings folder); a dot next to a group
+  shows that it differs from the preset,
 - after export, a notification in the corner of the window with an Open folder button (`notifikace.py`),
 - freely movable and detachable panels with saved layouts (see below),
 - interface in 5 languages,
