@@ -86,6 +86,7 @@ a = Analysis(
     datas=datas,
     hiddenimports=["prepis", "model", "export", "nahled", "osa", "prehravac", "dialogy", "jazyky_reci",
                    "doky", "PySide6QtAds", "selftest", "kolecko", "kupcake", "zarovnani", "hlas", "prekryti", "prubeh", "presety", "notifikace", "export_panel", "stahovani", "manifest_modelu", "hardware", "splash", "o_aplikaci", "uvitani", "links", "projekt", "logy", "aktualizace", "rozvrzeni", "upravy", "titulky", "theme", "i18n",
+                   "dlazdice", "uchop",
                    "cesty", "uroman", "julius",
                    "demucs.pretrained", "demucs.apply", "demucs.htdemucs", "demucs.hdemucs", "demucs.demucs",
                    "demucs.states"]

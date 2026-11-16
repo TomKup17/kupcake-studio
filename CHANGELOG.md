@@ -1,16 +1,8 @@
 # Změny
 
-## Neuvydáno – změny po 1.0.0-beta.2
+## 1.0.0-beta.3 – 2026-11-16
 
-- Soubor `LICENSE` je znovu nezměněný text GNU GPL v3, aby GitHub licenci repozitáře rozpoznal. Copyright
-  a označení `GPL-3.0-only` zůstávají v README, v `ADDITIONAL_PERMISSION.md` a v hlavičkách zdrojových souborů.
-- Nový malý instalátor `KupcakeStudio-Setup.exe` (asi 2 MB, `installer\KupcakeStudio-Web.iss`). Ukáže podmínky
-  použití a volby, stáhne z GitHub Releases části plného instalátoru téže verze, ověří jejich SHA-256 a spustí
-  plný instalátor bez průvodce s vybranými volbami. Zaškrtnuté AI modely (Whisper large-v3, přesné časování
-  pro zvolený jazyk – předvybraný podle jazyka Windows, Demucs) stáhne rovnou do složky modelů aplikace a každý
-  soubor ověří proti SHA-256 z `manifest_modelu.py`; aplikace je pak jen jednou ověří a na stažení se neptá.
-  Plný instalátor (`.exe` + části `.bin`) zůstává pro instalaci bez internetu. Data pro něj připraví
-  `nastroje\web_instalator.py`; `build.bat` ho sestaví po plném instalátoru, k vydání se tak nahrává pět souborů.
+### Nastavení z dlaždic
 - Sekce Nastavení je místo formuláře z dlaždic (nový modul `dlazdice.py`). Každá hodnota stylu má dlaždici,
   která ukazuje, co upravuje, a dlaždice se samy skládají do sloupců podle šířky sekce:
   - čísla (velikost, obrys, rozmazání a posun stínu, průhlednost a odsazení pozadí, počet slov a znaků, posun
@@ -22,22 +14,40 @@
     s dosavadním plným výběrem,
   - písmo ukazuje „Aa“ ve zvoleném písmu; kliknutí otevře seznam písem s hledáním,
   - pozice má malou obrazovku ve tvaru videa, na které jde titulek táhnout myší.
-
-  Dlaždice barvy, rozmazání a posunu stínu se s vypnutým stínem schovají (stejně jako dosud u pozadí
+- Dlaždice barvy, rozmazání a posunu stínu se s vypnutým stínem schovají (stejně jako dosud u pozadí
   a zvýraznění). Vysvětlivky ze spodku skupin Pozice a Časování jsou v nápovědě po najetí myší na dlaždici.
-  Kratší popisky: „Stín“, „Pozadí“, „Zvýraznit slovo“, „Slov najednou“. Presety, oranžová tečka u skupiny,
-  ukládání stylu ani projekty se nemění; nastavit jdou všechny hodnoty jako dřív. Testy: `tests\test_dlazdice.py`.
+  Kratší popisky: „Stín“, „Pozadí“, „Zvýraznit slovo“, „Slov najednou“.
+- Presety, oranžová tečka u skupiny, ukládání stylu ani projekty se nemění; nastavit jdou všechny hodnoty
+  jako dřív. Testy: `tests\test_dlazdice.py`.
+
+### Titulek jde chytit myší ve videu
 - Titulek jde chytit myší přímo ve videu v sekci Náhled (nový modul `uchop.py`). Po najetí myší se kolem
-  titulku ukáže modrý rámeček, kliknutím se titulek vybere. Tažením se přesune kamkoli v obraze, tažením za roh
-  rámečku se změní velikost písma (střed zůstává na místě). U středu videa se titulek vodorovně přichytí
-  a ukáže se svislá vodicí linka. Poloha a velikost jsou hodnoty stylu, platí tedy pro všechny titulky, dlaždice
-  v Nastavení ukazují totéž a po puštění myši se styl uloží. Kliknutí mimo titulek přepíná přehrávání jako dřív;
-  je-li titulek vybraný, první kliknutí mimo jen zruší výběr. Rámeček kreslí přehrávač jako vrstvu nad videem,
-  do exportu se nedostane.
-- Nová hodnota stylu `pozice_x` – vodorovná pozice titulků (0 = vlevo, 1 = vpravo, výchozí 0,5 = uprostřed jako
-  dosud). V Nastavení → Pozice jsou teď dvě dlaždice, **Vodorovně** a **Svisle**, obě s malou obrazovkou
-  a s přesností na desetiny procenta. Hodnota se ukládá do `styl.json`, presetů i projektů; starší soubory bez ní
-  zůstávají uprostřed. Platí i pro export videa a průhledných titulků. Testy: `tests\test_uchop.py`.
+  titulku ukáže modrý rámeček, kliknutím se titulek vybere.
+- Tažením se titulek přesune kamkoli v obraze. U středu videa se vodorovně přichytí a ukáže se svislá
+  vodicí linka.
+- Tažením za roh rámečku se změní velikost písma, střed titulku zůstává na místě.
+- Poloha a velikost jsou hodnoty stylu, platí tedy pro všechny titulky. Dlaždice v Nastavení ukazují totéž
+  a po puštění myši se styl uloží.
+- Kliknutí mimo titulek přepíná přehrávání jako dřív; je-li titulek vybraný, první kliknutí mimo jen zruší
+  výběr. Rámeček kreslí přehrávač jako vrstvu nad videem, do exportu se nedostane.
+
+### Vodorovná pozice titulků
+- Nová hodnota stylu `pozice_x` – vodorovná pozice titulků (0 = vlevo, 1 = vpravo, výchozí 0,5 = uprostřed
+  jako dosud). V Nastavení → Pozice jsou teď dvě dlaždice, **Vodorovně** a **Svisle**, obě s malou obrazovkou
+  a s přesností na desetiny procenta.
+- Hodnota se ukládá do `styl.json`, presetů i projektů; starší soubory bez ní zůstávají uprostřed. Platí i pro
+  export videa a průhledných titulků. Testy: `tests\test_uchop.py`.
+
+### Instalace a licence
+- Nový malý instalátor `KupcakeStudio-Setup.exe` (asi 2 MB, `installer\KupcakeStudio-Web.iss`). Ukáže podmínky
+  použití a volby, stáhne z GitHub Releases části plného instalátoru téže verze, ověří jejich SHA-256 a spustí
+  plný instalátor bez průvodce s vybranými volbami. Zaškrtnuté AI modely (Whisper large-v3, přesné časování
+  pro zvolený jazyk – předvybraný podle jazyka Windows, Demucs) stáhne rovnou do složky modelů aplikace a každý
+  soubor ověří proti SHA-256 z `manifest_modelu.py`; aplikace je pak jen jednou ověří a na stažení se neptá.
+  Plný instalátor (`.exe` + části `.bin`) zůstává pro instalaci bez internetu. Data pro něj připraví
+  `nastroje\web_instalator.py`; `build.bat` ho sestaví po plném instalátoru, k vydání se tak nahrává pět souborů.
+- Soubor `LICENSE` je znovu nezměněný text GNU GPL v3, aby GitHub licenci repozitáře rozpoznal. Copyright
+  a označení `GPL-3.0-only` zůstávají v README, v `ADDITIONAL_PERMISSION.md` a v hlavičkách zdrojových souborů.
 
 ## 1.0.0-beta.2 – 2026-11-12
 
