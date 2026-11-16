@@ -4,7 +4,7 @@
 
 - DlazdiceCislo – číslo s tlačítky − a +; po kliknutí na číslo jde hodnota zapsat, po kliknutí na dlaždici
   ji mění kolečko myši a šipky (pravidlo kolecko.py: bez fokusu kolečko posouvá panel),
-- DlazdicePozice – číslo doplněné malou obrazovkou, na které jde titulek táhnout myší,
+- DlazdicePozice – číslo doplněné malou obrazovkou, na které jde titulek táhnout myší (vodorovně / svisle),
 - DlazdicePrepinac – zapnuto/vypnuto jedním kliknutím, ukázka podle stylu (stín, pozadí, zvýraznění…),
 - DlazdiceBarva – barevný vzorek, kliknutím malá paleta častých barev a „Vlastní barva“,
 - DlazdicePismo – „Aa“ ve zvoleném písmu, kliknutím seznam písem s hledáním.
@@ -620,12 +620,13 @@ class DlazdiceCislo(DlazdiceHodnota):
 
 
 class DlazdicePozice(DlazdiceCislo):
-    """Svislá pozice titulku: vlevo malá obrazovka ve tvaru videa s titulkem (jde táhnout myší), vpravo
-    číslo v % a pod ním tlačítka − / +."""
+    """Pozice titulku v jedné ose (osa „x“ = vodorovně, „y“ = svisle): vlevo malá obrazovka ve tvaru videa
+    s titulkem na jeho skutečném místě (jde táhnout myší ve směru osy), vpravo číslo v % a tlačítka − / +."""
 
-    def __init__(self, zdroj, popisek, napoveda=None):
-        super().__init__(zdroj, popisek, 0, 100, 1, meritko=100, jednotka="%", symbol=self._obrazovka,
-                         napoveda=napoveda)
+    def __init__(self, zdroj, popisek, osa="y", napoveda=None):
+        super().__init__(zdroj, popisek, 0, 100, 1, desetinna=1, meritko=100, jednotka="%",
+                         symbol=self._obrazovka, napoveda=napoveda)
+        self.osa = osa
         self._tah = False
 
     def zony(self):
@@ -656,10 +657,13 @@ class DlazdicePozice(DlazdiceCislo):
         p.setPen(QPen(QColor(theme.DLAZDICE_RAMECEK_HOVER), 1))
         p.setBrush(QColor(theme.DLAZDICE_PLATNO))
         p.drawRoundedRect(o, 3, 3)
-        vyska = max(o.height() * 0.09, 3.0)
-        y = o.top() + o.height() * hodnota / 100
-        y = min(max(y, o.top() + vyska / 2 + 1), o.bottom() - vyska / 2 - 1)
-        titulek = QRectF(o.left() + o.width() * 0.16, y - vyska / 2, o.width() * 0.68, vyska)
+        # proužek = titulek; ve své ose podle hodnoty dlaždice, ve druhé podle stylu
+        x = hodnota / 100 if self.osa == "x" else styl.pozice_x
+        y = hodnota / 100 if self.osa == "y" else styl.pozice_y
+        sirka, vyska = o.width() * 0.5, max(o.height() * 0.09, 3.0)
+        stred_y = min(max(o.top() + o.height() * y, o.top() + vyska / 2 + 1), o.bottom() - vyska / 2 - 1)
+        titulek = QRectF(o.left() + o.width() * x - sirka / 2, stred_y - vyska / 2, sirka, vyska)
+        p.setClipRect(o.adjusted(1, 1, -1, -1))  # titulek u kraje přesahuje z obrazu stejně jako ve videu
         p.setPen(Qt.NoPen)
         p.setBrush(QColor(*theme.DLAZDICE_STIN))
         p.drawRoundedRect(titulek.translated(0, 1), 1.5, 1.5)
@@ -673,7 +677,9 @@ class DlazdicePozice(DlazdiceCislo):
 
     def _podle_mysi(self, e):
         o = self._plocha_obrazovky()
-        self.setValue(round((e.position().y() - o.top()) / max(o.height(), 1) * 100))
+        podil = ((e.position().x() - o.left()) / max(o.width(), 1) if self.osa == "x"
+                 else (e.position().y() - o.top()) / max(o.height(), 1))
+        self.setValue(round(podil * 100))
 
     def mousePressEvent(self, e):
         if e.button() == Qt.LeftButton and self.zony()[0].contains(e.position()):

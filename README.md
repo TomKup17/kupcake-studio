@@ -178,6 +178,8 @@ codecs may be subject to patent licences in some countries.
   (Ctrl+Shift+A),
 - subtitle editor, word-level timeline (groups, cuts, ripple delete, loop, markers, J/K/L…;
   **F1** shows all shortcuts),
+- the subtitle can be grabbed with the mouse right in the video: drag to move it, drag a corner of the
+  frame to resize it (`uchop.py`),
 - style panel made of tiles (`dlazdice.py` – each one shows what it changes) with live preview in the
   player and named presets (`presety.py`, `presety.json` in the settings folder); a dot next to a group
   shows that it differs from the preset,

@@ -452,7 +452,8 @@ class PanelStylu(QScrollArea):
         cislo("odsazeni_pozadi", "styl.odsazeni", 0, 100, desetinna=1, meritko=100, jednotka="%")
 
         g = self._skupina(lay, "pozice")
-        self._pridej(g, "pozice_y", dl.DlazdicePozice(self, "styl.pozice", napoveda="styl.tip.pozice_y"))
+        self._pridej(g, "pozice_x", dl.DlazdicePozice(self, "styl.pozice_x", "x", napoveda="styl.tip.pozice_x"))
+        self._pridej(g, "pozice_y", dl.DlazdicePozice(self, "styl.pozice", "y", napoveda="styl.tip.pozice_y"))
         cislo("max_slov", "styl.max_slov", 0, 12, specialni=lambda: t("styl.auto"))
         cislo("max_znaku", "styl.max_znaku", 5, 80)
 
@@ -520,7 +521,8 @@ class PanelStylu(QScrollArea):
     def nastav_pomer(self, sirka, vyska):
         """Poměr stran videa – malá obrazovka na dlaždici Pozice má stejný tvar jako video."""
         self.pomer = min(max(sirka / max(vyska, 1), 0.4), 2.4)
-        self.prvky["pozice_y"].prekresli_obrazovku()
+        for klic in ("pozice_x", "pozice_y"):
+            self.prvky[klic].prekresli_obrazovku()
 
     def nastav(self, styl):
         """Zobrazí hodnoty stylu bez vyslání změn."""
@@ -684,6 +686,9 @@ class Okno(QMainWindow):
             self.prehravac = Prehravac()
             self.ass_soubor = ASS_SOUBOR
             self.prehravac.cas.connect(self.cas_videa)
+            self.prehravac.uchop.posun.connect(self.titulek_posunut)
+            self.prehravac.uchop.velikost.connect(self.titulek_zvetsen)
+            self.prehravac.uchop.konec.connect(self.konec_upravy_v_nahledu)
             ls.addWidget(self.prehravac, 1)
             radek = QHBoxLayout()
             self.btn_zac_ted = QPushButton()
@@ -697,7 +702,7 @@ class Okno(QMainWindow):
                 radek.addWidget(b)
             ls.addLayout(radek)
             tip = QLabel()
-            prekladej(lambda: tip.setText(t("tip.prehravac")))
+            prekladej(lambda: tip.setText(t("tip.prehravac") + "\n" + t("tip.uchop")))
             tip.setObjectName("stav")
             tip.setWordWrap(True)
             ls.addWidget(tip)
@@ -2207,6 +2212,7 @@ class Okno(QMainWindow):
         if self.prehravac:
             self._zapis_ass()
             self.prehravac.obnov_titulky()
+            self._obnov_uchop()
             return
         # záloha bez libmpv: statický snímek přes ffmpeg
         if self.nahled_uloha is not None and self.nahled_uloha.isRunning():
@@ -2244,6 +2250,44 @@ class Okno(QMainWindow):
             self.aktivni = idx
             if idx >= 0 and not self.prehravac.mpv.pause:
                 self.tab.scrollToItem(self.tab.item(idx, 2))
+        self._obnov_uchop(t)
+
+    # ---------- titulek uchopený myší ve videu (uchop.py) ----------
+    def _text_ve_videu(self, cas):
+        """Text titulku, který je v čase `cas` ve videu vidět (s posunem a předstihem stylu), nebo None.
+        Bez titulků je vidět ukázkový text – i ten jde chytit a umístit."""
+        if not self.titulky:
+            return i18n.t("text.ukazka")
+        posun = (self.styl.posun_ms - self.styl.predstih_ms) / 1000
+        return next((x.text for x in self.titulky if x.start + posun <= cas < x.end + posun), None)
+
+    def _obnov_uchop(self, cas=None):
+        """Řekne přehrávači, který titulek je právě vidět a jakým stylem – podle toho ví, kam jde kliknout."""
+        if self.prehravac and self.video and self.info:
+            W, H, _ = self.info
+            cas = self.prehravac.t if cas is None else cas
+            self.prehravac.uchop.nastav_titulek(self._text_ve_videu(cas), self.styl, W, H)
+
+    def titulek_posunut(self, x, y):
+        """Tah titulku myší v náhledu: nová poloha středu (podíly šířky a výšky videa)."""
+        self.styl.pozice_x, self.styl.pozice_y = x, y
+        self._styl_z_nahledu()
+
+    def titulek_zvetsen(self, velikost):
+        """Tah za roh rámečku v náhledu: nová velikost písma (podíl šířky videa)."""
+        self.styl.velikost = velikost
+        self._styl_z_nahledu()
+
+    def _styl_z_nahledu(self):
+        self.panel.nastav(self.styl)  # dlaždice ukazují totéž co video
+        self._obnov_uchop()           # rámeček hned, titulky se překreslí vzápětí (nahled_timer)
+        self.obnov_nahled()
+
+    def konec_upravy_v_nahledu(self):
+        """Puštění myši po tahu: uložit styl jako po změně na dlaždici."""
+        self.styl.uloz(STYL_SOUBOR)
+        self._obnov_tecky()
+        self._nastav_neulozeno(True)
 
     def _zvyrazni(self, r, ano):
         if not 0 <= r < len(self.titulky):

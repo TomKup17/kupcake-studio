@@ -169,6 +169,8 @@ zemích podléhat patentovým licencím.
   (Demucs, `hlas.py`); posun a předstih titulků v Nastavení → Časování, Znovu zarovnat výběr (Ctrl+Shift+A),
 - editor titulků, časová osa po slovech (skupiny, střih, mazání s posunem, smyčka, značky, J/K/L…;
   všechny zkratky ukáže **F1**),
+- titulek jde chytit myší přímo ve videu: tažením se přesune, tažením za roh rámečku se změní velikost
+  (`uchop.py`),
 - panel stylu z dlaždic (`dlazdice.py` – každá ukazuje, co upravuje) s živým náhledem v přehrávači
   a pojmenovanými presety (`presety.py`, `presety.json` v nastavení); tečka u skupiny ukáže, že se liší
   od presetu,

@@ -88,6 +88,10 @@ DLAZDICE_KROK = TEXT_2              # tlačítka − a + v klidu
 DLAZDICE_KROK_HOVER = AKCE          # pod myší oranžová (akce) – stejně jako šipky číselných polí
 DLAZDICE_PLATNO = "#4B5058"         # „kousek videa“ pod ukázkou písma: šedá, na které je vidět i černý stín
 DLAZDICE_STIN = (0, 0, 0, 110)      # jemný stín pod proužkem titulku na malé obrazovce (dlaždice Pozice)
+# uchopení titulku myší ve videu (uchop.py): rámeček výběru modrý (výběr), úchyty v rozích světlé
+UCHOP_RAMECEK = AKCENT
+UCHOP_UCHYT = TEXT
+UCHOP_VODITKO = AKCENT              # svislá linka středu videa při přichycení
 # časté barvy titulků v malé paletě pod dlaždicí barvy (RRGGBB)
 PALETA_TITULKU = ["FFFFFF", "F2EC3C", "FFD400", "FF6A00", "FF3B30",
                   "FF4FA3", "39E75F", "00E5FF", "00B4FF", "000000"]

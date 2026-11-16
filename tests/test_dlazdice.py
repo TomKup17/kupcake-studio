@@ -34,7 +34,7 @@ i18n.nastav("cs")
 # hodnoty stylu, které šly nastavit ve formuláři před dlaždicemi – žádná nesmí chybět
 KLICE = ("font", "velikost", "barva_textu", "tucne", "velka_pismena", "barva_obrysu", "obrys", "stin",
          "barva_stinu", "stin_rozmazani", "stin_x", "stin_y", "pozadi", "barva_pozadi", "pruhlednost_pozadi",
-         "odsazeni_pozadi", "pozice_y", "max_slov", "max_znaku", "zvyrazneni", "barva_zvyrazneni", "posun_ms",
+         "odsazeni_pozadi", "pozice_x", "pozice_y", "max_slov", "max_znaku", "zvyrazneni", "barva_zvyrazneni", "posun_ms",
          "predstih_ms")
 
 
@@ -196,7 +196,8 @@ class TestCislo(unittest.TestCase):
         zmeny = []
         pozice.zmena.connect(zmeny.append)
         pozice.nastav_hodnotu(0.475)
-        self.assertAlmostEqual(pozice.value(), 48.0)  # jako dřívější posuvník: celá procenta
+        self.assertAlmostEqual(pozice.value(), 47.5)
+        self.assertEqual(pozice.text_cisla(), "47,5")
         o = pozice._plocha_obrazovky()
         for podil in (0.25, 0.9):
             bod = QPointF(o.center().x(), o.top() + o.height() * podil)
@@ -205,6 +206,24 @@ class TestCislo(unittest.TestCase):
             QApplication.sendEvent(pozice, QMouseEvent(typ, bod, globalni, Qt.LeftButton, Qt.LeftButton,
                                                        Qt.NoModifier))
         self.assertEqual(zmeny, [0.25, 0.9])
+
+    def test_pozice_vodorovne(self):
+        pozice = dlazdice.DlazdicePozice(self.zdroj, "styl.pozice_x", "x")
+        pozice.resize(110, theme.DLAZDICE_VYSKA)
+        zmeny = []
+        pozice.zmena.connect(zmeny.append)
+        pozice.nastav_hodnotu(0.5)
+        self.assertEqual((zmeny, pozice.text_cisla()), ([], "50"))
+        o = pozice._plocha_obrazovky()
+        bod = QPointF(o.left() + o.width() * 0.2, o.center().y())
+        QApplication.sendEvent(pozice, QMouseEvent(QEvent.MouseButtonPress, bod,
+                                                   QPointF(pozice.mapToGlobal(bod.toPoint())), Qt.LeftButton,
+                                                   Qt.LeftButton, Qt.NoModifier))
+        self.assertEqual(len(zmeny), 1)
+        self.assertAlmostEqual(zmeny[0], 0.2, delta=0.03)  # obrazovka je úzká – přesně to jde tlačítky nebo ve videu
+        pozice.krokuj(1)
+        self.assertAlmostEqual(zmeny[-1], zmeny[0] + 0.01)
+        self.assertFalse(pozice.grab().isNull())
 
 
 class TestPanel(unittest.TestCase):
@@ -241,6 +260,7 @@ class TestPanel(unittest.TestCase):
         self.assertAlmostEqual(p["obrys"].value(), 5.5)
         self.assertAlmostEqual(p["pruhlednost_pozadi"].value(), 65)
         self.assertAlmostEqual(p["pozice_y"].value(), 80)
+        self.assertAlmostEqual(p["pozice_x"].value(), 50)
         self.assertEqual(p["max_slov"].text_cisla(), "3")
         self.assertEqual(p["posun_ms"].text_cisla(), "-120")
         self.assertIsNot(self.panel.styl, styl)  # kopie – změna na dlaždici nesmí přepsat styl okna potichu

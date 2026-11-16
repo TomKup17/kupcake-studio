@@ -34,6 +34,7 @@ class Styl:
     zvyrazneni: bool = False        # zvýraznit právě vyslovované slovo
     barva_zvyrazneni: str = "FFFFFF"
     pozice_y: float = 0.475         # svislá pozice středu (0 = nahoře, 1 = dole)
+    pozice_x: float = 0.5           # vodorovná pozice středu (0 = vlevo, 1 = vpravo)
     velka_pismena: bool = True
     max_znaku: int = 15             # max. znaků na obrazovce
     max_slov: int = 0               # max. slov na obrazovce (0 = jen podle znaků)
@@ -317,7 +318,7 @@ def vytvor_ass(titulky, styl, W, H, nahled=False):
     size = round(W * styl.velikost)
     blur = styl.stin_rozmazani * W / 1080 * 0.6
     obrys = size * styl.obrys
-    x, y = W // 2, round(H * styl.pozice_y)
+    x, y = int(W * styl.pozice_x), round(H * styl.pozice_y)  # uprostřed (0,5) = W // 2 jako dřív
     sx, sy = x + round(styl.stin_x * W / 1080), y + round(styl.stin_y * W / 1080)
     fad = "" if nahled else f"\\fad({styl.fade_in},{styl.fade_out})"
     bold = -1 if styl.tucne else 0

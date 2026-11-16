@@ -12,6 +12,7 @@ from PySide6.QtWidgets import QApplication, QHBoxLayout, QLabel, QPushButton, QS
 
 import theme
 from cesty import FONTY_DIR, MPV_DIR, TMP_DIR
+from uchop import UchopTitulku
 
 if MPV_DIR.is_dir():
     os.add_dll_directory(str(MPV_DIR))
@@ -40,7 +41,13 @@ def _vypni_vstup_mpv(hwnd):
 
 
 class VideoPlocha(QWidget):
-    kliknuto = Signal()
+    """Nativní plocha, do které kreslí mpv. Myš jen hlásí dál – co s ní, rozhoduje uchop.UchopTitulku
+    (titulek jde chytit a táhnout; kliknutí mimo titulek přepne přehrávání)."""
+    stisk = Signal(QPointF)
+    pohyb = Signal(QPointF, bool)   # bod, drží se levé tlačítko
+    uvolneni = Signal(QPointF)
+    opusteno = Signal()
+    zmena_velikosti = Signal()
 
     def __init__(self):
         super().__init__()
@@ -49,9 +56,26 @@ class VideoPlocha(QWidget):
         self.setObjectName("videoPlocha")
         self.setStyleSheet(f"QWidget#videoPlocha {{ background: {theme.VIDEO_POZADI}; border-radius: 6px; }}")
         self.setMinimumSize(200, 200)
+        self.setMouseTracking(True)  # pohyb i bez stisknutého tlačítka – kurzor nad titulkem
 
     def mousePressEvent(self, e):
-        self.kliknuto.emit()
+        if e.button() == Qt.LeftButton:
+            self.stisk.emit(e.position())
+
+    def mouseMoveEvent(self, e):
+        self.pohyb.emit(e.position(), bool(e.buttons() & Qt.LeftButton))
+
+    def mouseReleaseEvent(self, e):
+        if e.button() == Qt.LeftButton:
+            self.uvolneni.emit(e.position())
+
+    def leaveEvent(self, e):
+        self.opusteno.emit()
+        super().leaveEvent(e)
+
+    def resizeEvent(self, e):
+        super().resizeEvent(e)
+        self.zmena_velikosti.emit()
 
 
 class PlayTlacitko(QPushButton):
@@ -162,8 +186,16 @@ class Prehravac(QWidget):
         lay.setContentsMargins(0, 0, 0, 0)
         lay.setSpacing(8)
         self.plocha = VideoPlocha()
-        self.plocha.kliknuto.connect(self.prepni)
         lay.addWidget(self.plocha, 1)
+        # titulek ve videu jde chytit myší (posun, velikost); kliknutí mimo něj přepne přehrávání jako dřív
+        self.uchop = UchopTitulku(self.plocha, self._rozmery_vrstvy, self._kresli_vrstvu)
+        self.plocha.stisk.connect(self.uchop.stisk)
+        self.plocha.pohyb.connect(self.uchop.pohyb)
+        self.plocha.uvolneni.connect(self.uchop.uvolneni)
+        self.plocha.opusteno.connect(self.uchop.opusteno)
+        # mpv přepočítá rozměry obrazu chvilku po změně velikosti plochy – rámeček se překreslí až potom
+        self.plocha.zmena_velikosti.connect(lambda: QTimer.singleShot(80, self.uchop.prekresli))
+        self.uchop.klik_mimo.connect(self.prepni)
 
         ovl = QHBoxLayout()
         ovl.setSpacing(10 - theme.PLAY_ZARE_POLOMER // 2)  # část mezery tvoří rezerva pro záři tlačítka
@@ -210,8 +242,31 @@ class Prehravac(QWidget):
         self.zpet_timer.setInterval(50)
         self.zpet_timer.timeout.connect(self._krok_zpet)
 
+    # ---------- vrstva nad videem (rámeček uchopeného titulku) ----------
+    VRSTVA_ID = 1
+
+    def _rozmery_vrstvy(self):
+        """Rozměry vrstvy nad videem a okraje kolem obrazu v jejích pixelech; None bez načteného videa."""
+        if not self.delka:
+            return None
+        try:
+            return self.mpv.osd_dimensions
+        except Exception:
+            return None
+
+    def _kresli_vrstvu(self, ass, sirka, vyska):
+        try:
+            if ass is None:
+                self.mpv.command("osd-overlay", id=self.VRSTVA_ID, format="none", data="")
+            else:
+                self.mpv.command("osd-overlay", id=self.VRSTVA_ID, format="ass-events", data=ass,
+                                 res_x=sirka, res_y=vyska)
+        except Exception:
+            pass  # rámeček je jen pomůcka – přehrávání kvůli němu nesmí spadnout
+
     def nacti(self, video):
         self.delka, self.t = 0.0, 0.0
+        self.uchop.zapomen()
         self._zastav_jkl()
         self.nastav_smycku(None)
         self.mpv.pause = True

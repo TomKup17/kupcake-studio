@@ -27,6 +27,17 @@
   a zvýraznění). Vysvětlivky ze spodku skupin Pozice a Časování jsou v nápovědě po najetí myší na dlaždici.
   Kratší popisky: „Stín“, „Pozadí“, „Zvýraznit slovo“, „Slov najednou“. Presety, oranžová tečka u skupiny,
   ukládání stylu ani projekty se nemění; nastavit jdou všechny hodnoty jako dřív. Testy: `tests\test_dlazdice.py`.
+- Titulek jde chytit myší přímo ve videu v sekci Náhled (nový modul `uchop.py`). Po najetí myší se kolem
+  titulku ukáže modrý rámeček, kliknutím se titulek vybere. Tažením se přesune kamkoli v obraze, tažením za roh
+  rámečku se změní velikost písma (střed zůstává na místě). U středu videa se titulek vodorovně přichytí
+  a ukáže se svislá vodicí linka. Poloha a velikost jsou hodnoty stylu, platí tedy pro všechny titulky, dlaždice
+  v Nastavení ukazují totéž a po puštění myši se styl uloží. Kliknutí mimo titulek přepíná přehrávání jako dřív;
+  je-li titulek vybraný, první kliknutí mimo jen zruší výběr. Rámeček kreslí přehrávač jako vrstvu nad videem,
+  do exportu se nedostane.
+- Nová hodnota stylu `pozice_x` – vodorovná pozice titulků (0 = vlevo, 1 = vpravo, výchozí 0,5 = uprostřed jako
+  dosud). V Nastavení → Pozice jsou teď dvě dlaždice, **Vodorovně** a **Svisle**, obě s malou obrazovkou
+  a s přesností na desetiny procenta. Hodnota se ukládá do `styl.json`, presetů i projektů; starší soubory bez ní
+  zůstávají uprostřed. Platí i pro export videa a průhledných titulků. Testy: `tests\test_uchop.py`.
 
 ## 1.0.0-beta.2 – 2026-11-12
 

@@ -18,7 +18,7 @@ SKUPINY = {
     "text": ("font", "velikost", "barva_textu", "tucne", "velka_pismena"),
     "obrys": ("barva_obrysu", "obrys", "stin", "barva_stinu", "stin_rozmazani", "stin_x", "stin_y"),
     "pozadi": ("pozadi", "barva_pozadi", "pruhlednost_pozadi", "odsazeni_pozadi"),
-    "pozice": ("pozice_y", "max_slov", "max_znaku"),
+    "pozice": ("pozice_x", "pozice_y", "max_slov", "max_znaku"),
     "efekty": ("zvyrazneni", "barva_zvyrazneni"),
 }
 
